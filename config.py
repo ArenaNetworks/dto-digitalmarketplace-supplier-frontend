@@ -157,7 +157,7 @@ class Live(Config):
 
     FEATURE_FLAGS = {
         'EDIT_SECTIONS': False,
-        'SELLER_EDIT': False,
+        'SELLER_EDIT': True,
         'DM_FRAMEWORK': True,
     }
 

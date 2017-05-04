@@ -183,7 +183,8 @@ def submit_application(id):
     if application['application']['status'] == 'saved':
         data_api_client.req.applications(id).submit().post(data={'user_id': current_user.id})
 
-    return render_template('suppliers/application_submitted.html')
+    return render_template('suppliers/application_submitted.html',
+                           application_type=application['application'].get('type'))
 
 
 @main.route('/application/<int:id>', methods=['GET'])
@@ -208,7 +209,8 @@ def render_application(id, step=None, substep=None):
         'user_email': current_user.email_address
     }
 
-    rendered_component = render_component('bundles/SellerRegistration/ApplicantSignupWidget.js', props)
+    widget = application['application'].get('type') == 'edit' and 'ProfileEdit' or 'ApplicantSignup'
+    rendered_component = render_component('bundles/SellerRegistration/{}Widget.js'.format(widget), props)
 
     return render_template(
         '_react.html',

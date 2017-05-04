@@ -18,12 +18,21 @@ with items = [
 {% block main_content %}
 
 <header class="page-heading page-heading-without-breadcrumb">
-  <h1>
-    <img alt=" " src="{{ asset_path }}images/tick.svg" style="
-    height: 1em;
-    padding-right: 0.3em;
-"> Application complete
-  </h1>
+  {% if application_type == 'edit'%}
+    <h1>
+      <img alt=" " src="{{ asset_path }}images/tick.svg" style="
+      height: 1em;
+      padding-right: 0.3em;
+      "> Thanks, your profile has been sent for review.
+    </h1>
+  {% else %}
+    <h1>
+      <img alt=" " src="{{ asset_path }}images/tick.svg" style="
+      height: 1em;
+      padding-right: 0.3em;
+      "> Application complete
+    </h1>
+  {% endif %}
 </header>
 
 <div class="grid-row">
@@ -43,26 +52,33 @@ with items = [
           <li>the assessment process</li>
         </ul>
       {%  else  %}
-      <p>Your updated business profile will appear in the seller catalogue soon. We will send you an email to let you know when it goes live.</p>
-        <h2>What happens now</h2>
+        {% if application_type == 'edit'%}
+          <p>We will review your profile updates to ensure the new content is suitable for the Digital Marketplace. We will send you an email to let you know once your updated profile is live.</p>
+          <p>An assessment will be triggered when you apply for an opportunity that needs expertise you’re not yet approved to offer. If we can confirm your expertise before the opportunity closes we will invite you to apply.</p>
+          <p>You can apply for opportunities you’ve been successfully assessed for in future without the need for further assessment.</p>
+        {% else %}
+          <p>Your updated business profile will appear in the seller catalogue soon. We will send you an email to let you know when it goes live.</p>
+          <h2>What happens now</h2>
 
-        You can continue to apply for opportunities as normal.
+          You can continue to apply for opportunities as normal.
 
-        We also recommend reading our new <a href="/sellers-guide" target="_blank" rel="external">seller guide</a>.</p>
-        <p>It explains:</p>
-        <ul>
-          <li>How to add new services</li>
-          <li>What to expect during assessments</li>
-          <li>Why you need to express interest in an opportunity at least 3 days before it closes, if it requires a service you’ve not yet been assessed for.</li>
-        </ul>
+          We also recommend reading our new <a href="/sellers-guide" target="_blank" rel="external">seller guide</a>.</p>
+          <p>It explains:</p>
+          <ul>
+            <li>How to add new services</li>
+            <li>What to expect during assessments</li>
+            <li>Why you need to express interest in an opportunity at least 3 days before it closes, if it requires a service you’ve not yet been assessed for.</li>
+          </ul>
+        {% endif %}
       {%  endif %}
 
-
-
-
-      <h2>Your feedback shapes the Marketplace</h2>
-      If you have any questions or comments, or you’d like to help make sure the Marketplace meets your needs by
-      taking part in user research, email us at <a href="mailto:marketplace@digital.gov.au">marketplace@digital.gov.au</a>.
+      {% if application_type == 'edit'%}
+        <p><a href="/digital-marketplace/opportunities">View opportunities</a></p>
+      {% else %}
+        <h2>Your feedback shapes the Marketplace</h2>
+        If you have any questions or comments, or you’d like to help make sure the Marketplace meets your needs by
+        taking part in user research, email us at <a href="mailto:marketplace@digital.gov.au">marketplace@digital.gov.au</a>.
+      {% endif %}
     </div>
 </div>
 
