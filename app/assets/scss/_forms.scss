@@ -1,7 +1,16 @@
 .list-entry {
   position: relative;
 }
-
+.link-entry {
+  label {
+    display: inline-block;
+    min-width: 60px;
+  }
+  input {
+    display: inline-block;
+    width: 85%;
+  }
+}
 label {
   @extend h4;
 
