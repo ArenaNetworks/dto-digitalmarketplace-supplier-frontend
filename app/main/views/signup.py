@@ -1,6 +1,6 @@
 import six
 import rollbar
-from flask import render_template, request, url_for, current_app, abort, jsonify, redirect, Response
+from flask import render_template, request, url_for, current_app, abort, jsonify, redirect, Response, flash
 from flask_login import current_user, login_user
 from app.main import main
 from react.render import render_component
@@ -11,6 +11,7 @@ from dmutils.user import User
 from dmutils.logging import notify_team
 from app.main.helpers.users import generate_application_invitation_token, decode_user_token
 from app import data_api_client
+from cryptography.fernet import InvalidToken
 from ..helpers import applicant_login_required, role_required
 import os
 from dmutils.file import s3_upload_file_from_request, s3_download_file
@@ -88,7 +89,10 @@ def send_seller_signup_email():
 @main.route('/signup/create-user/<string:token>', methods=['GET'])
 def render_create_application(token, data=None, errors=None):
     data = data or {}
-    token_data = decode_user_token(token.encode())
+    try:
+        token_data = decode_user_token(token.encode())
+    except InvalidToken:
+        return render_template('errors/500.html', error_message='Account creation invitation invalid or expired')
 
     if not token_data.get('email_address'):
         abort(503, 'Invalid email address')
