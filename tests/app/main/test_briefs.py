@@ -115,6 +115,7 @@ class TestBriefQuestionAndAnswerSession(BaseApplicationTest):
         self.application = {
             "application": {
                 "application_id": 9876,
+                "type": "new",
                 "status": "approved"
             }
         }

@@ -345,6 +345,7 @@ def create_assessment(brief_id):
 
     domain_name = brief.get('areaOfExpertise')
     data_api_client.req.assessments().post(data={
+        'update_details': {'updated_by': current_user.email_address},
         'assessment': {
             'supplier_code': current_user.supplier_code,
             'domain_name': domain_name,
