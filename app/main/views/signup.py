@@ -58,6 +58,10 @@ def send_seller_signup_email():
     if errors:
         return start_seller_signup(user, errors)
 
+    duplicate = data_api_client.req.users().checkduplicates().post(data={"email_address": user['email_address']})
+    if duplicate.get('duplicate'):
+        return render_template('auth/seller-signup-email-sent.html', email_address=user['email_address'])
+
     token = generate_application_invitation_token(user)
     url = url_for('main.render_create_application', token=token, _external=True)
     email_body = render_template(

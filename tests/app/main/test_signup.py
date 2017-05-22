@@ -66,8 +66,11 @@ class TestSignupPage(BaseApplicationTest):
 
         assert res.status_code == 200
 
+    @mock.patch('app.main.views.signup.data_api_client')
     @mock.patch('app.main.views.signup.send_email')
-    def test_email_valid_application(self, send_email):
+    def test_email_valid_application(self, send_email, data_api_client):
+
+        data_api_client.req.users().checkduplicates().post.return_value = {"duplicate": None}
 
         res = self.client.post(
             self.expand_path('/signup'),
@@ -82,6 +85,20 @@ class TestSignupPage(BaseApplicationTest):
             self.app.config['INVITE_EMAIL_FROM'],
             self.app.config['INVITE_EMAIL_NAME']
         )
+
+    @mock.patch('app.main.views.signup.data_api_client')
+    @mock.patch('app.main.views.signup.send_email')
+    def test_duplicate_user(self, send_email, data_api_client):
+
+        data_api_client.req.users().checkduplicates().post.return_value = {"duplicate": {"supplier_code": 1}}
+
+        res = self.client.post(
+            self.expand_path('/signup'),
+            data=self.test_user
+        )
+
+        assert res.status_code == 200
+        send_email.assert_not_called()
 
     @mock.patch('app.main.views.signup.start_seller_signup')
     def test_invalid_application(self, seller_signup):
@@ -102,9 +119,11 @@ class TestSignupPage(BaseApplicationTest):
             {'name': {'required': True}}
         )
 
+    @mock.patch('app.main.views.signup.data_api_client')
     @mock.patch('app.main.views.signup.send_email')
-    def test_email_error(self, send_email):
+    def test_email_error(self, send_email, data_api_client):
         send_email.side_effect = EmailError("Failed")
+        data_api_client.req.users().checkduplicates().post.return_value = {"duplicate": None}
 
         res = self.client.post(
             self.expand_path('/signup'),
