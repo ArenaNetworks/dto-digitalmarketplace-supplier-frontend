@@ -116,13 +116,16 @@ def brief_response(brief_id):
 
     if 'areaOfExpertise' in brief:
         current_supplier = data_api_client.req.suppliers(current_user.supplier_code).get()
+        outcome_but_has_assessed_domains = (brief['lotSlug'] == 'digital-outcome' and
+                                            len(current_supplier['supplier']['domains'].get('assessed', [])) > 0)
 
-        if not supplier_is_assessed(current_supplier, brief['areaOfExpertise']):
-            if supplier_is_unassessed(current_supplier, brief['areaOfExpertise']):
-                return redirect(url_for(".create_assessment", brief_id=brief_id))
-            else:
-                current_domain = data_api_client.req.domain(brief['areaOfExpertise']).get()
-                return redirect('/case-study/create/{}/brief/{}'.format(current_domain['domain']['id'], brief_id))
+        if not outcome_but_has_assessed_domains and \
+                not supplier_is_assessed(current_supplier, brief['areaOfExpertise']):
+                if supplier_is_unassessed(current_supplier, brief['areaOfExpertise']):
+                    return redirect(url_for(".create_assessment", brief_id=brief_id))
+                else:
+                    current_domain = data_api_client.req.domain(brief['areaOfExpertise']).get()
+                    return redirect('/case-study/create/{}/brief/{}'.format(current_domain['domain']['id'], brief_id))
 
     framework, lot = get_framework_and_lot(
         data_api_client, brief['frameworkSlug'], brief['lotSlug'], allowed_statuses=['live'])
