@@ -16,8 +16,6 @@ from ..helpers import applicant_login_required, role_required
 import os
 from dmutils.file import s3_upload_file_from_request, s3_download_file
 import mimetypes
-import flask_featureflags as feature
-import pendulum
 
 S3_PATH = 'applications'
 
@@ -333,3 +331,18 @@ def authorise_application(id):
                            name=application['representative'],
                            email_address=application['email'],
                            subject=current_app.config['AUTHREP_EMAIL_SUBJECT'])
+
+
+@main.route('/application/<int:id>/discard', methods=['GET'])
+@applicant_login_required
+def discard_application(id):
+    application = data_api_client.get_application(id)
+    if not can_user_view_application(application):
+        abort(403, 'Not authorised to access application')
+    if is_application_submitted(application):
+        return redirect(url_for('.submit_application', id=id))
+
+    data_api_client.req.applications(id).delete(data={"updated_by": current_user.email_address})
+
+    flash('Your profile changes have been discarded', 'success')
+    return redirect(url_for('.dashboard'))

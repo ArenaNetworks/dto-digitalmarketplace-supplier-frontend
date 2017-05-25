@@ -527,6 +527,20 @@ class TestApplicationPage(BaseApplicationTest):
                 self.app.config['INVITE_EMAIL_NAME']
             )
 
+    @mock.patch("app.main.views.signup.data_api_client")
+    @mock.patch('app.main.views.signup.render_component')
+    def test_application_discard(self, render_component, data_api_client):
+        render_component.return_value.get_props.return_value = {}
+        render_component.return_value.get_slug.return_value = 'slug'
+
+        with self.app.test_client():
+            self.login_as_applicant()
+            data_api_client.get_application.side_effect = get_application
+            res = self.client.get(self.expand_path('/application/1/discard'))
+
+            assert res.status_code == 302
+            data_api_client.req.applications().delete.assert_called()
+
 
 class TestDocuments(BaseApplicationTest):
 
