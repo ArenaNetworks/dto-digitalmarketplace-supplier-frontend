@@ -594,6 +594,8 @@ class TestRespondToBrief(BaseApplicationTest):
 
     def test_redirect_to_case_study_page(self, data_api_client):
         brief = self.brief.copy()
+        brief['briefs']['frameworkSlug'] = 'digital-marketplace'
+        brief['briefs']['lotSlug'] = 'digital-specialists'
         brief['briefs']['areaOfExpertise'] = 'Data Science'
         data_api_client.get_brief.return_value = brief
         data_api_client.get_framework.return_value = self.framework
@@ -607,8 +609,27 @@ class TestRespondToBrief(BaseApplicationTest):
         assert res.status_code == 302
         assert 'case-study' in res.location
 
+    def test_redirect_to_domain_choose_page(self, data_api_client):
+        brief = self.brief.copy()
+        brief['briefs']['frameworkSlug'] = 'digital-marketplace'
+        brief['briefs']['lotSlug'] = 'digital-outcome'
+        brief['briefs']['areaOfExpertise'] = 'Data Science'
+        data_api_client.get_brief.return_value = brief
+        data_api_client.get_framework.return_value = self.framework
+        data_api_client.get_supplier.return_value = self.supplier
+        data_api_client.get_application.return_value = self.application
+        data_api_client.req.suppliers().get.return_value = {
+            'supplier': {'domains': {}}
+        }
+        res = self.client.get(self.url_for('main.brief_response', brief_id=1234))
+
+        assert res.status_code == 302
+        assert 'choose' in res.location
+
     def test_redirect_to_assessment_page(self, data_api_client):
         brief = self.brief.copy()
+        brief['briefs']['frameworkSlug'] = 'digital-marketplace'
+        brief['briefs']['lotSlug'] = 'digital-specialists'
         brief['briefs']['areaOfExpertise'] = 'Data Science'
         data_api_client.get_brief.return_value = brief
         data_api_client.get_framework.return_value = self.framework
@@ -630,7 +651,7 @@ class TestRespondToBrief(BaseApplicationTest):
         data_api_client.get_supplier.return_value = self.supplier
         data_api_client.get_application.return_value = self.application
         render_component.return_value.get_props.return_value = {}
-        res = self.client.get(self.url_for('main.create_assessment', brief_id=1234))
+        res = self.client.get(self.url_for('main.create_assessment', brief_id=1234, domain_id=1))
 
         assert res.status_code == 200
 

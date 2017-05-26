@@ -114,18 +114,17 @@ def brief_response(brief_id):
         flash('already_applied', 'error')
         return redirect(url_for(".view_response_result", brief_id=brief_id))
 
-    if 'areaOfExpertise' in brief:
+    if brief['frameworkSlug'] == 'digital-marketplace':
         current_supplier = data_api_client.req.suppliers(current_user.supplier_code).get()
-        outcome_but_has_assessed_domains = (brief['lotSlug'] == 'digital-outcome' and
-                                            len(current_supplier['supplier']['domains'].get('assessed', [])) > 0)
-
-        if not outcome_but_has_assessed_domains and \
-                not supplier_is_assessed(current_supplier, brief['areaOfExpertise']):
-                if supplier_is_unassessed(current_supplier, brief['areaOfExpertise']):
-                    return redirect(url_for(".create_assessment", brief_id=brief_id))
-                else:
-                    current_domain = data_api_client.req.domain(brief['areaOfExpertise']).get()
-                    return redirect('/case-study/create/{}/brief/{}'.format(current_domain['domain']['id'], brief_id))
+        if brief['lotSlug'] == 'digital-outcome':
+            if len(current_supplier['supplier']['domains'].get('assessed', [])) == 0:
+                return redirect(url_for(".choose_assessment", brief_id=brief_id))
+        else:
+            current_domain = data_api_client.req.domain(brief['areaOfExpertise']).get()
+            if supplier_is_unassessed(current_supplier, brief['areaOfExpertise']):
+                return redirect(url_for(".create_assessment", brief_id=brief_id, domain_id=current_domain['id']))
+            else:
+                return redirect('/case-study/create/{}/brief/{}'.format(current_domain['domain']['id'], brief_id))
 
     framework, lot = get_framework_and_lot(
         data_api_client, brief['frameworkSlug'], brief['lotSlug'], allowed_statuses=['live'])
@@ -341,12 +340,52 @@ def _render_not_eligible_for_brief_error_page(brief, clarification_question=Fals
     ), 400
 
 
-@main.route('/opportunities/<int:brief_id>/assessment', methods=['GET'])
+@main.route('/opportunities/<int:brief_id>/assessment/choose', methods=['GET'])
 @login_required
-def create_assessment(brief_id):
+def choose_assessment(brief_id):
+    framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
+    opportunity_url = '/{}/opportunities'.format(framework_slug)
+    domains = {data_api_client.req.domain(domain_name).get()['domain']['id']: domain_name
+               for domain_name
+               in data_api_client.get_supplier(current_user.supplier_code)['supplier']['domains']['unassessed']}
+    props = {
+            'domains': domains,
+            'brief_id': brief_id,
+            'assessmentUrl': url_for(".create_assessment", brief_id=brief_id),
+    }
+
+    rendered_component = render_component('bundles/Brief/DomainAssessmentChoiceWidget.js', props)
+
+    return render_template(
+        '_react.html',
+        breadcrumb_items=[
+            {
+                "link": '/',
+                "label": "Home"
+            },
+            {
+                "link": opportunity_url,
+                "label": "Opportunities"
+            },
+            {
+                "label": "Choose Assessment Area of Expertise"
+            }
+        ],
+        component=rendered_component
+    )
+
+
+@main.route('/opportunities/<int:brief_id>/assessment', methods=['GET'])
+@main.route('/opportunities/<int:brief_id>/assessment/<int:domain_id>', methods=['GET'])
+@login_required
+def create_assessment(brief_id, domain_id=None):
+    if request.args.get('local.domain'):
+        domain_id = int(request.args.get('local.domain'))
+    if domain_id is None:
+        return abort(400)
     brief = get_brief(data_api_client, brief_id, allowed_statuses=['live'])
 
-    domain_name = brief.get('areaOfExpertise')
+    domain_name = data_api_client.req.domain(domain_id).get()['domain']['name']
     data_api_client.req.assessments().post(data={
         'update_details': {'updated_by': current_user.email_address},
         'assessment': {
