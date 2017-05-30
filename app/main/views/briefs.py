@@ -327,6 +327,7 @@ def _render_error_page(eligibleTemplate, brief, clarification_question=False,):
         eligibleTemplate,
         clarification_question=clarification_question,
         framework_name=brief['frameworkSlug'],
+        lot_name=brief['lotSlug'],
         domain=brief.get('areaOfExpertise', ''),
     ), 400
 
@@ -336,6 +337,7 @@ def _render_not_eligible_for_brief_error_page(brief, clarification_question=Fals
         "briefs/not_is_supplier_eligible_for_brief_error.html",
         clarification_question=clarification_question,
         framework_name=brief['frameworkSlug'],
+        lot_name=brief['lotSlug'],
         domain=brief.get('areaOfExpertise', '')
     ), 400
 

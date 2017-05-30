@@ -1,6 +1,6 @@
 {% extends "_base_page.html" %}
 
-{% block page_title %}Can't apply for opportunity – Digital Marketplace{% endblock %}
+{% block page_title %}You need to update your profile to apply – Digital Marketplace{% endblock %}
 
 {% block main_content %}
 
@@ -12,14 +12,20 @@
                     <h1>You need to update your profile to apply</h1>
                 </header>
                 <p>
-                  To apply for this opportunity you need to be a member of the Digital Marketplace Panel. <br/>
-                  As a current member of the Digital Service Professionals Panel you're pre-approved to join. <br/>
-                  All you need to do is complete you seller profile update and accept the new Master Agreement. <br/>
-                  The Digital Marketplace team will then review your profile before adding your business to the Digital Marketplace Panel. <br/>
-                  <br/>
-                    Please note you will also need to be approved to offer {{ domain }} to apply for this opportunity as normal. <br/>
+                  To apply for this opportunity you need to be a member of the Digital Marketplace Panel.
+                </p><p>
+                  As a current member of the Digital Service Professionals Panel you're pre-approved to join.
+                </p><p>
+                      All you need to do is complete you seller profile update and accept the new Master Agreement.
+                      The Digital Marketplace team will then review your profile before adding your business to the Digital Marketplace Panel.
+                </p>
 
-                    <br/><a href="/sellers/update">Update your seller profile now</a>
+                  {% if lot_name == 'digital-professionals' %}
+                    <p>
+                    Please note you will also need to be approved to offer {{ domain }} to apply for this opportunity as normal. <br/>
+                    </p>
+                  {% endif %}
+                   <a href="/sellers/update">Update your seller profile now</a>
                 </p>
 
             </div>
