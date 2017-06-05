@@ -120,11 +120,12 @@ def brief_response(brief_id):
             if len(current_supplier['supplier']['domains'].get('assessed', [])) == 0:
                 return redirect(url_for(".choose_assessment", brief_id=brief_id))
         else:
-            current_domain = data_api_client.req.domain(brief['areaOfExpertise']).get()
-            if supplier_is_unassessed(current_supplier, brief['areaOfExpertise']):
-                return redirect(url_for(".create_assessment", brief_id=brief_id, domain_id=current_domain['id']))
-            else:
-                return redirect('/case-study/create/{}/brief/{}'.format(current_domain['domain']['id'], brief_id))
+            if not supplier_is_assessed(current_supplier, brief['areaOfExpertise']):
+                current_domain = data_api_client.req.domain(brief['areaOfExpertise']).get()
+                if supplier_is_unassessed(current_supplier, brief['areaOfExpertise']):
+                    return redirect(url_for(".create_assessment", brief_id=brief_id, domain_id=current_domain['id']))
+                else:
+                    return redirect('/case-study/create/{}/brief/{}'.format(current_domain['domain']['id'], brief_id))
 
     framework, lot = get_framework_and_lot(
         data_api_client, brief['frameworkSlug'], brief['lotSlug'], allowed_statuses=['live'])
