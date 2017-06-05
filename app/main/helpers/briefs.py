@@ -64,6 +64,7 @@ def is_supplier_not_eligible_for_brief(data_api_client, supplier_code, brief):
         if not digital_marketplace_seller and not old_panel:
             return 'briefs/cant_apply_to_new_panel_opportunity.html'
 
+    brief_closing_date = brief.get('dates').get('closing_date')
     application_status = None
     application_id = current_user.application_id
     if application_id:
@@ -72,10 +73,13 @@ def is_supplier_not_eligible_for_brief(data_api_client, supplier_code, brief):
         if application_type == 'new' or application_type == 'upgrade':
             application_status = application.get('application').get('status')
 
-    # sanity check
+    # user expresses interest in brief but they are not an assessed seller
     if application_status == 'submitted':
+        # triggers jiraapi fn to prioritise a related approval task
+        data_api_client.req.prioritise(application_id).post(brief_closing_date)
         return 'briefs/pending_initial_seller_assessment.html'
 
+    # sanity check
     if supplier is None:
         return 'briefs/not_is_supplier_eligible_for_brief_error.html'
 
