@@ -123,7 +123,8 @@ def brief_response(brief_id):
             if not supplier_is_assessed(current_supplier, brief['areaOfExpertise']):
                 current_domain = data_api_client.req.domain(brief['areaOfExpertise']).get()
                 if supplier_is_unassessed(current_supplier, brief['areaOfExpertise']):
-                    return redirect(url_for(".create_assessment", brief_id=brief_id, domain_id=current_domain['id']))
+                    return redirect(url_for(".create_assessment", brief_id=brief_id,
+                                            domain_id=current_domain['domain']['id']))
                 else:
                     return redirect('/case-study/create/{}/brief/{}'.format(current_domain['domain']['id'], brief_id))
 
