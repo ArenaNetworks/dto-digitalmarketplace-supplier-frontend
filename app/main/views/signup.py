@@ -21,7 +21,7 @@ S3_PATH = 'applications'
 
 
 def can_user_view_application(application):
-    return current_user.application_id == application['application']['id']
+    return current_user.application_id == application['application']['id'] or current_user.has_role('admin')
 
 
 def is_application_submitted(application):
@@ -201,7 +201,7 @@ def render_application(id, step=None, substep=None):
     application = data_api_client.get_application(id)
     if not can_user_view_application(application):
         abort(403, 'Not authorised to access application')
-    if is_application_submitted(application):
+    if is_application_submitted(application) and not current_user.has_role('admin'):
         return redirect(url_for('.submit_application', id=id))
 
     props = dict(application)
@@ -231,7 +231,7 @@ def application_update(id, step=None):
     old_application = data_api_client.get_application(id)
     if not can_user_view_application(old_application):
         abort(403, 'Not authorised to access application')
-    if is_application_submitted(old_application):
+    if is_application_submitted(old_application) and not current_user.has_role('admin'):
         return redirect(url_for('.submit_application', id=id))
 
     json = request.content_type == 'application/json'
@@ -277,7 +277,7 @@ def upload_single_file(id, slug):
     application = data_api_client.get_application(id)
     if not can_user_view_application(application):
         abort(403, 'Not authorised to access application')
-    if is_application_submitted(application):
+    if is_application_submitted(application) and not current_user.has_role('admin'):
         abort(400, 'Application already submitted')
 
     return s3_upload_file_from_request(request, slug, os.path.join(S3_PATH, str(id)))
