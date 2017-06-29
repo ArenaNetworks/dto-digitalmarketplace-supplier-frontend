@@ -402,8 +402,56 @@ def create_assessment(brief_id, domain_id=None):
     opportunity_url = '/{}/opportunities'.format(framework_slug)
     props = {
         'form_options': {
+            'created': True,
             'domain': domain_name,
             'opportunityUrl': opportunity_url,
+            'closingDate':
+                'dates' in brief and 'closing_date' in brief['dates'] and brief['dates']['closing_date'] or None
+        }
+    }
+
+    if current_user.supplier_code is not None:
+        props['form_options']['profileUrl'] = '/supplier/{}'.format(current_user.supplier_code)
+
+    rendered_component = render_component('bundles/CaseStudy/CaseStudySubmitConfirmationWidget.js', props)
+
+    return render_template(
+        '_react.html',
+        breadcrumb_items=[
+            {
+                "link": '/',
+                "label": "Home"
+            },
+            {
+                "link": opportunity_url,
+                "label": "Opportunities"
+            },
+            {
+                "label": "Assessment submitted"
+            }
+        ],
+        component=rendered_component
+    )
+
+
+@main.route('/opportunities/<int:brief_id>/assessment/status', methods=['GET'])
+@login_required
+def assessment_status(brief_id):
+    framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
+    opportunity_url = '/{}/opportunities'.format(framework_slug)
+    previewUrl = '/{}/opportunities/{}/response'.format(framework_slug, brief_id)
+
+    brief = get_brief(data_api_client, brief_id, allowed_statuses=['live'])
+    domain = brief.get('areaOfExpertise', None)
+
+    props = {
+        'form_options': {
+            'inReview': True,
+            'domain': domain,
+            'briefTitle': brief.get('title', None),
+            'briefLot': brief.get('lot', None),
+            'opportunityUrl': opportunity_url,
+            'previewUrl': previewUrl,
             'closingDate':
                 'dates' in brief and 'closing_date' in brief['dates'] and brief['dates']['closing_date'] or None
         }
@@ -423,7 +471,67 @@ def create_assessment(brief_id, domain_id=None):
                 "label": "Opportunities"
             },
             {
-                "label": "Assessment submitted"
+                "label": "Assessment Status"
+            }
+        ],
+        component=rendered_component
+    )
+
+
+@main.route('/opportunities/<int:brief_id>/assessment/initial', methods=['GET'])
+@login_required
+def assessment_initial(brief_id):
+    framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
+    opportunity_url = '/{}/opportunities'.format(framework_slug)
+    previewUrl = '/{}/opportunities/{}/response'.format(framework_slug, brief_id)
+
+    brief = get_brief(data_api_client, brief_id, allowed_statuses=['live'])
+    domain = brief.get('areaOfExpertise', None)
+
+    profile_url = None
+    is_recruiter = False
+    if current_user.supplier_code is not None:
+        profile_url = '/supplier/{}'.format(current_user.supplier_code)
+        supplier = data_api_client.get_supplier(
+            current_user.supplier_code).get('supplier', None)
+
+        if supplier is not None:
+            is_recruiter = supplier.get('is_recruiter', False)
+        if is_recruiter == 'false':
+            is_recruiter = False
+        if is_recruiter == 'true':
+            is_recruiter = True
+
+    props = {
+        'form_options': {
+            'initial': True,
+            'domain': domain,
+            'briefTitle': brief.get('title', None),
+            'briefLot': brief.get('lot', None),
+            'opportunityUrl': opportunity_url,
+            'previewUrl': previewUrl,
+            'profileUrl': profile_url,
+            'isRecruiter': is_recruiter,
+            'closingDate':
+                'dates' in brief and 'closing_date' in brief['dates'] and brief['dates']['closing_date'] or None
+        }
+    }
+
+    rendered_component = render_component('bundles/CaseStudy/CaseStudySubmitConfirmationWidget.js', props)
+
+    return render_template(
+        '_react.html',
+        breadcrumb_items=[
+            {
+                "link": '/',
+                "label": "Home"
+            },
+            {
+                "link": opportunity_url,
+                "label": "Opportunities"
+            },
+            {
+                "label": "Assessment Status"
             }
         ],
         component=rendered_component
