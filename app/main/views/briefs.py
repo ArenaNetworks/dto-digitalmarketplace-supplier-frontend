@@ -352,6 +352,12 @@ def choose_assessment(brief_id):
     domains = {data_api_client.req.domain(domain_name).get()['domain']['id']: domain_name
                for domain_name
                in data_api_client.get_supplier(current_user.supplier_code)['supplier']['domains']['unassessed']}
+
+    supplier_assessments = data_api_client.req.assessments().supplier(current_user.supplier_code).get()
+    for domain in range(len(supplier_assessments['unassessed'])):
+        if domain in domains:
+            domains.remove(domain)
+
     props = {
             'domains': domains,
             'brief_id': brief_id,
@@ -405,6 +411,7 @@ def create_assessment(brief_id, domain_id=None):
             'created': True,
             'domain': domain_name,
             'opportunityUrl': opportunity_url,
+            'briefLot': brief.get('lot', None),
             'closingDate':
                 'dates' in brief and 'closing_date' in brief['dates'] and brief['dates']['closing_date'] or None
         }
