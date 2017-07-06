@@ -354,9 +354,11 @@ def choose_assessment(brief_id):
                in data_api_client.get_supplier(current_user.supplier_code)['supplier']['domains']['unassessed']}
 
     supplier_assessments = data_api_client.req.assessments().supplier(current_user.supplier_code).get()
-    for domain in range(len(supplier_assessments['unassessed'])):
-        if domain in domains:
-            domains.remove(domain)
+
+    for domain in supplier_assessments['unassessed']:
+        for key, value in domains.items():
+            if value == domain:
+                del domains[key]
 
     props = {
             'domains': domains,
