@@ -349,12 +349,14 @@ def _render_not_eligible_for_brief_error_page(brief, clarification_question=Fals
 def choose_assessment(brief_id):
     framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
     opportunity_url = '/{}/opportunities'.format(framework_slug)
+    supplier_domains = data_api_client.get_supplier(current_user.supplier_code)['supplier']['domains']
     domains = {data_api_client.req.domain(domain_name).get()['domain']['id']: domain_name
                for domain_name
-               in data_api_client.get_supplier(current_user.supplier_code)['supplier']['domains']['unassessed']}
+               in supplier_domains['unassessed']}
 
     supplier_assessments = data_api_client.req.assessments().supplier(current_user.supplier_code).get()
-
+    if brief_id in supplier_assessments['briefs']:
+        return redirect(url_for('main.assessment_status', brief_id=brief_id))
     for domain in supplier_assessments['unassessed']:
         for key, value in domains.items():
             if value == domain:
