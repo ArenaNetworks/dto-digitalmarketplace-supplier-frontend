@@ -410,12 +410,14 @@ def create_assessment(brief_id, domain_id=None):
 
     framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
     opportunity_url = '/{}/opportunities'.format(framework_slug)
+    previewUrl = '/{}/opportunities/{}/response'.format(framework_slug, brief_id)
     props = {
         'form_options': {
             'created': True,
             'domain': domain_name,
             'opportunityUrl': opportunity_url,
             'briefLot': brief.get('lot', None),
+            'previewUrl': previewUrl,
             'closingDate':
                 'dates' in brief and 'closing_date' in brief['dates'] and brief['dates']['closing_date'] or None
         }
