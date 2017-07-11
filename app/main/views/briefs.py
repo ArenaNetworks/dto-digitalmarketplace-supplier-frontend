@@ -126,7 +126,7 @@ def brief_response(brief_id):
                     return redirect(url_for(".create_assessment", brief_id=brief_id,
                                             domain_id=current_domain['domain']['id']))
                 else:
-                    return redirect('/case-study/create/{}/brief/{}'.format(current_domain['domain']['id'], brief_id))
+                    return _render_error_page('briefs/missing_domain.html', brief)
 
     framework, lot = get_framework_and_lot(
         data_api_client, brief['frameworkSlug'], brief['lotSlug'], allowed_statuses=['live'])

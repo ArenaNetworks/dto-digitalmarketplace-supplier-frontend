@@ -592,7 +592,7 @@ class TestRespondToBrief(BaseApplicationTest):
         assert res.location == self.get_login_redirect_url(create_url)
         self.assert_flashes("supplier-role-required", "error")
 
-    def test_redirect_to_case_study_page(self, data_api_client):
+    def test_redirect_to_missing_domain_error(self, data_api_client):
         brief = self.brief.copy()
         brief['briefs']['frameworkSlug'] = 'digital-marketplace'
         brief['briefs']['lotSlug'] = 'digital-specialists'
@@ -606,8 +606,7 @@ class TestRespondToBrief(BaseApplicationTest):
         }
         res = self.client.get(self.url_for('main.brief_response', brief_id=1234))
 
-        assert res.status_code == 302
-        assert 'case-study' in res.location
+        assert res.status_code == 400
 
     def test_redirect_to_domain_choose_page(self, data_api_client):
         brief = self.brief.copy()
