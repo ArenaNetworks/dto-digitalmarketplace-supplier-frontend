@@ -131,7 +131,7 @@ class Development(Config):
     # Throw an exception in dev when a feature flag is used in code but not defined. Otherwise it is assumed False.
     RAISE_ERROR_ON_MISSING_FEATURES = True
 
-    DM_DATA_API_URL = "http://localhost:5000"
+    DM_DATA_API_URL = "http://localhost:5000/api/"
     DM_DATA_API_AUTH_TOKEN = "myToken"
     DM_API_AUTH_TOKEN = "myToken"
 
