@@ -26,7 +26,7 @@ def decode_user_token(token):
         token,
         current_app.config['SECRET_KEY'],
         current_app.config['SUPPLIER_INVITE_TOKEN_SALT'],
-        7 * ONE_DAY_IN_SECONDS
+        14 * ONE_DAY_IN_SECONDS
     )
     return data
 
