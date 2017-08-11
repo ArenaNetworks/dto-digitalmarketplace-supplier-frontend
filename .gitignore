@@ -75,6 +75,7 @@ app/static
 
 # IDE
 .idea/
+*.iml
 
 version_label
 *.sublime-project
