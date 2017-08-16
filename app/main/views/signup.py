@@ -166,11 +166,18 @@ def create_application(token):
 @main.route('/application')
 @applicant_login_required
 def my_application():
-    try:
-        application = data_api_client.get_application(current_user.application_id)['application']
-    except APIError as e:
-        current_app.logger.error(e)
-        abort(e.status_code)
+    # if an applicant has no application, create a new one for them
+    if current_user.role == 'applicant' and current_user.application_id is None:
+        application = data_api_client.create_application(
+            {'status': 'saved', 'framework': 'digital-marketplace'})['application']
+        data_api_client.req.users(current_user.id).post({'users': {'application_id': application['id']},
+                                                         'updated_by': current_user.email_address})
+    else:
+        try:
+            application = data_api_client.get_application(current_user.application_id)['application']
+        except APIError as e:
+            current_app.logger.error(e)
+            abort(e.status_code)
 
     # if application not in saved state, it has been submitted so show message after submit
     if application.get('status', 'saved') != 'saved':
