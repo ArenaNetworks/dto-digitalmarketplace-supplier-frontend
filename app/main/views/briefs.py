@@ -395,6 +395,8 @@ def choose_assessment(brief_id):
 def create_assessment(brief_id, domain_id=None):
     if request.args.get('local.domain'):
         domain_id = int(request.args.get('local.domain'))
+    if request.args.get('domain'):
+        domain_id = int(request.args.get('domain'))
     if domain_id is None:
         return abort(400)
     brief = get_brief(data_api_client, brief_id, allowed_statuses=['live'])
