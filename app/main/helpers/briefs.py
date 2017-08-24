@@ -68,10 +68,13 @@ def is_supplier_not_eligible_for_brief(data_api_client, supplier_code, brief):
     application_status = None
     application_id = current_user.application_id
     if application_id:
-        application = data_api_client.get_application(application_id)
-        application_type = application.get('application').get('type')
-        if application_type == 'new' or application_type == 'upgrade':
-            application_status = application.get('application').get('status')
+        try:
+            application = data_api_client.get_application(application_id)
+            application_type = application.get('application').get('type')
+            if application_type == 'new' or application_type == 'upgrade':
+                application_status = application.get('application').get('status')
+        except:
+            pass
 
     # user expresses interest in brief but they are not an assessed seller
     if application_status == 'submitted':
