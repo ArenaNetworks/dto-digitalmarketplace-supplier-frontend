@@ -21,7 +21,10 @@ S3_PATH = 'applications'
 
 
 def can_user_view_application(application):
-    return current_user.application_id == application['application']['id'] or current_user.has_role('admin')
+    return (current_user.application_id == application['application']['id'] or
+            (current_user.supplier_code and
+             current_user.supplier_code == application['application']['supplier_code']) or
+            current_user.has_role('admin'))
 
 
 def is_application_submitted(application):
