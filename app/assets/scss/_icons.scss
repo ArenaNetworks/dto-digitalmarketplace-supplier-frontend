@@ -40,3 +40,8 @@
 %icon-external-link--aqua {
   @include inline-background-image('external-link--aqua');
 }
+
+.tick-icon {
+  height: 1em;
+  padding-right: 0.3em;
+}

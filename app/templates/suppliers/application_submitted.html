@@ -20,17 +20,11 @@ with items = [
 <header class="page-heading page-heading-without-breadcrumb">
   {% if application_type == 'edit'%}
     <h1>
-      <img alt=" " src="{{ asset_path }}images/tick.svg" style="
-      height: 1em;
-      padding-right: 0.3em;
-      "> Thanks, your profile has been sent for review
+      <img alt=" " src="{{ asset_path }}images/tick.svg" class="tick-icon"> Thanks, your profile has been sent for review
     </h1>
   {% else %}
     <h1>
-      <img alt=" " src="{{ asset_path }}images/tick.svg" style="
-      height: 1em;
-      padding-right: 0.3em;
-      "> Application complete
+      <img alt=" " src="{{ asset_path }}images/tick.svg" class="tick-icon"> Application complete
     </h1>
   {% endif %}
 </header>

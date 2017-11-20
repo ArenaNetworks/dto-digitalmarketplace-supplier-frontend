@@ -18,7 +18,23 @@ footer[role='contentinfo'] {
   }
 
   .footer-logo {
-
+    .nisalogo {
+      padding-right: 2em
+    }
+    .nisa {
+      max-width: 30em;
+      font-family: Helvetica;
+      vertical-align: top;
+      div {
+        display: inline-block;
+        font-size: 14px;
+        line-height: 21px;
+        margin-top: 20px;
+        a {
+          font-weight: bold;
+        }
+      }
+    }
     ul {
       display: table;
       margin: 0 auto;
@@ -32,7 +48,7 @@ footer[role='contentinfo'] {
     li {
       display: inline-block;
       margin: 0 $base-spacing 0 0;
-      
+
       &:not(:last-of-type) {
         margin-bottom: $base-spacing*1.5;
       }
@@ -43,13 +59,13 @@ footer[role='contentinfo'] {
     }
 
     @include media($desktop) {
-      
+
       li {
 
         &:not(:first-of-type) {
           margin: 0 0 0 $base-spacing*1.5;
         }
-      
+
         &:last-child {
           margin-left: $small-spacing;
         }

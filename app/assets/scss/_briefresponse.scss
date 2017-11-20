@@ -1,3 +1,7 @@
+.validation-message.invalid {
+  color: #cc0000;
+}
+
 .brief-response-pricing {
   margin-bottom: 4rem;
 
@@ -11,10 +15,6 @@
       margin-top: 0;
     }
 
-  }
-
-  .validation-message.invalid {
-    color: #cc0000;
   }
 
   .word-count-counter {
@@ -50,5 +50,11 @@ fieldset.question-textarea-list {
   textarea {
     height: 15rem;
     margin-bottom: 0;
+  }
+}
+
+legend {
+  .question-heading {
+    font-size: 1.2rem;
   }
 }
