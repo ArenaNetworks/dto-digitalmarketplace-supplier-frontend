@@ -1,15 +1,18 @@
 <header class="page-heading{%- if smaller %}-smaller{% endif %}{%- if context is defined %} page-heading-with-context{% endif %}{%- if not with_breadcrumb %} page-heading-without-breadcrumb{% endif %}">
-  {%- if context is defined -%}
-    <p class="context">
-      {{ context }}
-    </p>
-  {%- endif -%}
-  <div>
-
-  {# TODO: fix this bad and hacky css, in a hurry for go-live #}
-
-  <h1 style="float:left;">{{ heading }}</h1>
-  <a style="float:right;" href="{{ '/supplier/{}'.format(current_user.supplier_code) }}" class="">View your profile</a>
-  <br style="clear: both">
-</div>
+    {%- if context is defined -%}
+        <p class="context">
+            {{ context }}
+        </p>
+    {%- endif -%}
+    <div>
+        <div class="row">
+            <div class="col-xs-9 col-sm-5">
+                <h1>{{ heading }}</h1>
+            </div>
+            <div class="col-sm-push-5 col-xs-3">
+                <a href="{{ '/supplier/{}'.format(current_user.supplier_code) }}" class="">View your
+                    profile</a>
+            </div>
+        </div>
+    </div>
 </header>
