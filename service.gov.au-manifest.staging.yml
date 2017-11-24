@@ -3,6 +3,11 @@ buildpack: python_buildpack
 memory: 128M
 disk_quota: 1G
 instances: 1
+services:
+- ups-dm-dev-common
+- ups-dm-dev-supplier
+routes:
+- route: dm-dev.apps.z.cld.gov.au/sellers
+- route: dm-dev-supplier.apps.z.cld.gov.au
 applications:
-- name: dm-dev-supplier-blue
-- name: dm-dev-supplier-green
+- name: dm-dev-supplier
