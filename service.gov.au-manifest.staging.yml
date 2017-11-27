@@ -7,7 +7,7 @@ services:
 - ups-dm-dev-common
 - ups-dm-dev-supplier
 routes:
-- route: dm-dev.apps.z.cld.gov.au/sellers
-- route: dm-dev-supplier.apps.z.cld.gov.au
+- route: dm-dev.apps.y.cld.gov.au/sellers
+- route: dm-dev-supplier.apps.y.cld.gov.au
 applications:
 - name: dm-dev-supplier
