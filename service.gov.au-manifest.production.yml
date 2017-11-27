@@ -2,15 +2,12 @@ command: scripts/cf_run_app.sh
 buildpack: python_buildpack
 memory: 256M
 disk_quota: 1G
-instances: 1
-env:
-    DM_ENVIRONMENT: production
-    NEW_RELIC_ENVIRONMENT: production
-    DM_DATA_API_URL:  https://marketplace.service.gov.au/api/
+instances: 2
+services:
+- ups-dm-common
+- ups-dm-supplier
 routes:
 - route: marketplace.service.gov.au/sellers
-- route: dm-supplier.apps.platform.digital.gov.au/
+- route: dm-supplier.apps.b.cld.gov.au
 applications:
-- name: dm-supplier-blue
-- name: dm-supplier-green
-
+- name: dm-supplier
