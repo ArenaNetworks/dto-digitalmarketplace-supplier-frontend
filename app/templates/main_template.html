@@ -1,7 +1,7 @@
 {% block top_of_page %}{% endblock %}
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="{{ html_lang|default('en') }}"><![endif]-->
-<!--[if gt IE 8]><!--><html lang="{{ html_lang|default('en') }}"><!--<![endif]-->
+<!--[if gt IE 8]><!--><html class="js" lang="{{ html_lang|default('en') }}"><!--<![endif]-->
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,7 +33,7 @@
     <a href="#main-navigation">Skip to section navigation</a>
   </div>
 
-  <header role="banner" class="{% block header_class %}{% endblock %}">
+  <header role="banner" class="{% block header_class %}{% endblock %} au-grid au-body">
 
     <section class="phase-banner">
       <div class="wrapper">
@@ -41,41 +41,30 @@
           This is a beta. For support please <a href="mailto:marketplace@digital.gov.au" onclick="zE.activate({hideOnClose: true});return false;">contact us</a>.
       </div>
     </section>
-    <section class="marketplace--header">
-      <div class="wrapper">
-        {% if marketplace_home != request.path %}
-        <div class="marketplace--logo">
-          <a href="{{ marketplace_home }}" title="{{ logo_link_title|default('Go to the Marketplace homepage') }}" class="logo">Digital Marketplace</a> <span class="badge--beta">BETA</span>
-        </div>
-        {% endif %}
-        <div class="user-nav">
-          {% set dashboardText = 'Dashboard' %}
-          {% if current_user.role == 'buyer' %}
-            {% set dashboardUrl = config['BASE_PREFIX'] + '/sellers' %}
-          {% elif current_user.role == 'applicant'  %}
-            {% set dashboardText = 'Continue application' %}
-            {% set dashboardUrl = '/sellers/application' %}
-          {% else %}
-            {% set dashboardUrl = '/sellers' %}
-          {% endif %}
-          {% set registerUrl = config['BASE_PREFIX'] + '/sellers/signup' %}
-          {% set registerText = 'Join the Marketplace' %}
-            {% set props = {
-            'registerUrl': registerUrl,
-            'registerText': registerText,
-            'loginUrl': config['BASE_PREFIX'] + '/login',
-            'dashboardUrl': dashboardUrl,
-            'dashboardText': dashboardText,
-            'logoutUrl': config['BASE_PREFIX'] + '/logout',
-            'isAuthenticated': current_user.is_authenticated
-            } %}
-          {% set auth_component = render_component('bundles/Header/AuthWidget.js', props, True) %}
-          {{ auth_component|as('react_bundle') }}
-        </div>
-      </div>
+    <section>
+      {% set dashboardText = 'Dashboard' %}
+      {% if current_user.role == 'buyer' %}
+        {% set dashboardUrl = config['BASE_PREFIX'] + '/sellers' %}
+      {% elif current_user.role == 'applicant'  %}
+        {% set dashboardText = 'Continue application' %}
+        {% set dashboardUrl = '/sellers/application' %}
+      {% else %}
+        {% set dashboardUrl = '/sellers' %}
+      {% endif %}
+      {% set registerUrl = config['BASE_PREFIX'] + '/sellers/signup' %}
+      {% set registerText = 'Join the Marketplace' %}
+        {% set props = {
+        'registerUrl': registerUrl,
+        'registerText': registerText,
+        'loginUrl': config['BASE_PREFIX'] + '/login',
+        'dashboardUrl': dashboardUrl,
+        'dashboardText': dashboardText,
+        'logoutUrl': config['BASE_PREFIX'] + '/logout',
+        'isAuthenticated': current_user.is_authenticated
+        } %}
+      {% set auth_component = render_component('bundles/Header/AuthWidget.js', props, True) %}
+      {{ auth_component|as('react_bundle') }}
     </section>
-    {% block hero %}{% endblock %}
-
   </header>
 
   {% block breadcrumb %}{% endblock %}
@@ -88,9 +77,8 @@
 
   {% block content_sub %}{% endblock %}
 
-  <footer role="contentinfo">
+  <footer  class="au-footer footer au-body au-body--dark au-footer--dark">
     <div class="wrapper">
-      {% block footer_top %}{% endblock %}
       {% block footer %}{% endblock %}
     </div>
   </footer>
