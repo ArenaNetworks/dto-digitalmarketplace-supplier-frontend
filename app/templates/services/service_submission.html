@@ -29,7 +29,7 @@
       } if not lot.oneServiceLimit else {}
     ]
   %}
-    {% include "toolkit/breadcrumb.html" %}
+    {% include "_light_breadcrumb.html" %}
   {% endwith %}
   {% if service_data.status == 'submitted' and declaration_status != 'complete' and framework.status == 'open' %}
     <div class="wrapper">
