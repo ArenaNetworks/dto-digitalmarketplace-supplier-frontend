@@ -12,7 +12,7 @@ coverage==4.3.4
 cryptography==1.7.2
 cssselect==1.0.1
 docutils==0.13.1
-git+https://github.com/AusDTO/dto-digitalmarketplace-apiclient.git@ab93a1978e8d0a72fc2695d2817ba06bdadfa45e#egg=dto_digitalmarketplace_apiclient==whatever
+git+https://github.com/AusDTO/dto-digitalmarketplace-apiclient.git@a76569b5e2059620b182f0a3afe343766ad0b132#egg=dto_digitalmarketplace_apiclient==whatever
 git+https://github.com/AusDTO/dto-digitalmarketplace-content-loader.git@663ca400be81deeb4aec40445e45889e9ed1663e#egg=dto_digitalmarketplace_content_loader==whatever
 git+https://github.com/AusDTO/dto-digitalmarketplace-utils.git@f36910294bfe70ef6b0fd766b043a97469df06bf#egg=dto_digitalmarketplace_utils==whatever
 enum34==1.1.6
