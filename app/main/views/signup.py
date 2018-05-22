@@ -225,6 +225,14 @@ def render_application(id, step=None, substep=None):
         'user_email': current_user.email_address
     }
 
+    # Add service pricing
+    if 'services' in application['application']:
+        props['application']['domains'] = {'prices': {'maximum': {}}}
+        for domain_name in application['application']['services'].keys():
+            props['application']['domains']['prices']['maximum'][domain_name] = (
+                application['domains']['prices']['maximum'][domain_name]
+            )
+
     widget = application['application'].get('type') == 'edit' and 'ProfileEdit' or 'ApplicantSignup'
     rendered_component = render_component('bundles/SellerRegistration/{}Widget.js'.format(widget), props)
 
