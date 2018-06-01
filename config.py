@@ -92,7 +92,10 @@ class Config(object):
     S3_ENDPOINT_URL = 's3-ap-southeast-2.amazonaws.com'
     AWS_DEFAULT_REGION = ''
 
-    GENERIC_EMAIL_DOMAINS = ['gmail.com', 'bigpond.com', 'outlook.com', 'hotmail.com', 'yahoo.com']
+    GENERIC_EMAIL_DOMAINS = ['bigpond.com', 'digital.gov.au', 'gmail.com', 'hotmail.com', 'icloud.com',
+                             'iinet.net.au', 'internode.on.net', 'live.com.au', 'me.com', 'msn.com',
+                             'optusnet.com.au', 'outlook.com', 'outlook.com.au', 'ozemail.com.au',
+                             'yahoo.com', 'yahoo.com.au']
 
     ROLLBAR_TOKEN = None
     DM_TEAM_SLACK_WEBHOOK = None
