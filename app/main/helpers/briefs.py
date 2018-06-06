@@ -33,12 +33,14 @@ def is_supplier_selected_for_brief(data_api_client, current_user, brief):
     if brief.get('sellerSelector', '') == 'allSellers':
         return True
     if brief.get('sellerSelector', '') == 'someSellers':
-        seller_domain_list = [domain(x).lower() for x in brief['sellerEmailList']]
-        return current_user.email_address in brief['sellerEmailList']\
-            or (current_user_domain.lower() in seller_domain_list if current_user_domain else False)
+        seller_domain_list = [domain(x).lower() for x in brief.get('sellerEmailList', [])]
+        return (current_user.email_address in
+                (email_address.lower() for email_address in brief.get('sellerEmailList', [])) or
+                (current_user_domain.lower() in seller_domain_list if current_user_domain else False))
     if brief.get('sellerSelector', '') == 'oneSeller':
-        return current_user.email_address.lower() == brief['sellerEmail'].lower() \
-            or (current_user_domain.lower() == domain(brief['sellerEmail'].lower()) if current_user_domain else False)
+        return (current_user.email_address.lower() == brief.get('sellerEmail', '').lower() or
+                (current_user_domain.lower() == domain(brief.get('sellerEmail', '').lower())
+                if current_user_domain else False))
     return False
 
 
