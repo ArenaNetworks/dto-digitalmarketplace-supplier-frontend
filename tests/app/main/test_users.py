@@ -65,7 +65,7 @@ class TestListUsers(BaseApplicationTest):
 
             res = self.client.get(self.url_for('main.list_users'))
             assert_equal(res.status_code, 200)
-            data_api_client.find_users.assert_called_once_with(supplier_code=1234)
+            data_api_client.find_users.assert_called_once_with(supplier_code=1234, simple=True)
 
             # strings we would expect to find in the output
             for string in [
