@@ -12,7 +12,8 @@ from ... import data_api_client
 def get_current_suppliers_users():
 
     users = data_api_client.find_users(
-        supplier_code=current_user.supplier_code
+        supplier_code=current_user.supplier_code,
+        simple=True
     ).get('users')
 
     active_users = [user for user in users if user['active']]
