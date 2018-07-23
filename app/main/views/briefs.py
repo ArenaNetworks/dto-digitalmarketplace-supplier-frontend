@@ -287,9 +287,11 @@ def view_response_result(brief_id):
         supplier_code=current_user.supplier_code
     )['briefResponses']
 
+    # A check for training lot is required because essentialRequirements is not
+    # included in training responses
     if len(brief_response) == 0:
         return redirect(url_for(".brief_response", brief_id=brief_id))
-    elif all(brief_response[0]['essentialRequirements']):
+    elif brief['lotSlug'] == 'training' or all(brief_response[0]['essentialRequirements']):
         result_state = 'submitted_ok'
     else:
         result_state = 'submitted_unsuccessful'
