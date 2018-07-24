@@ -350,7 +350,7 @@ def _render_not_eligible_for_brief_error_page(brief, clarification_question=Fals
 @login_required
 def choose_assessment(brief_id):
     framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
-    opportunity_url = '/{}/opportunities'.format(framework_slug)
+    opportunity_url = '/2/opportunities'
     supplier_domains = data_api_client.get_supplier(current_user.supplier_code)['supplier']['domains']
     domains = {data_api_client.req.domain(domain_name).get()['domain']['id']: domain_name
                for domain_name
@@ -413,7 +413,7 @@ def create_assessment(brief_id, domain_id=None):
         }})
 
     framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
-    opportunity_url = '/{}/opportunities'.format(framework_slug)
+    opportunity_url = '/2/opportunities'
     previewUrl = '/{}/opportunities/{}/response'.format(framework_slug, brief_id)
     props = {
         'form_options': {
@@ -455,7 +455,7 @@ def create_assessment(brief_id, domain_id=None):
 @login_required
 def assessment_status(brief_id):
     framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
-    opportunity_url = '/{}/opportunities'.format(framework_slug)
+    opportunity_url = '/2/opportunities'
     previewUrl = '/{}/opportunities/{}/response'.format(framework_slug, brief_id)
 
     brief = get_brief(data_api_client, brief_id, allowed_statuses=['live'])
@@ -499,7 +499,7 @@ def assessment_status(brief_id):
 @login_required
 def assessment_initial(brief_id):
     framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
-    opportunity_url = '/{}/opportunities'.format(framework_slug)
+    opportunity_url = '/2/opportunities'
     previewUrl = '/{}/opportunities/{}/response'.format(framework_slug, brief_id)
 
     brief = get_brief(data_api_client, brief_id, allowed_statuses=['live'])

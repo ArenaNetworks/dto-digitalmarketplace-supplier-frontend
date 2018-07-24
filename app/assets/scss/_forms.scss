@@ -19,7 +19,7 @@ label {
 
   &.text-box-number-label {
     color: $grey;
-    left: $tiny-spacing;
+    left: 1.25rem;
     margin: 0;
     position: absolute;
     top: 0.7em;
@@ -52,7 +52,7 @@ label {
 
     &.text-box-number-label {
       color: $grey;
-      left: $tiny-spacing;
+      left: 1.25rem;
       margin: 0;
       position: absolute;
       top: 0.7em;
@@ -83,7 +83,7 @@ label {
 
     .hint {
       color: $grey;
-      margin-bottom: 0;
+      margin: 0;
     }
 
     .hint-with-error {
@@ -160,7 +160,8 @@ form {
 
     .hint {
       color: $grey;
-      margin-bottom: 0;
+      margin: 0;
+      max-width: 100%;
     }
 
     textarea {

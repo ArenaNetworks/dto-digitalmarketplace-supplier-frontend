@@ -230,6 +230,11 @@
   padding: 0;
   border-top: solid 1px $light-grey;
 
+  &__item.row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   &__item {
     list-style: none;
     margin: 0;

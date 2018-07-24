@@ -1,3 +1,5 @@
+$screen-sm:                  768px !default;
+
 #casestudy__view {
   .sidebar {
     float: left;
@@ -47,6 +49,7 @@
   padding: 1em;
   border-radius: 3px;
 }
-.calloutMistake ul {
-  padding-top: 0.8em;
+
+.calloutMistake ul.mistake-list {
+  margin-top: 1.2rem;
 }
