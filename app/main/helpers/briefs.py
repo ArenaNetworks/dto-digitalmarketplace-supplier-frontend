@@ -75,7 +75,7 @@ def is_supplier_not_eligible_for_brief(data_api_client, supplier_code, brief):
             application_type = application.get('application').get('type')
             if application_type == 'new' or application_type == 'upgrade':
                 application_status = application.get('application').get('status')
-        except:
+        except:  # noqa
             pass
 
     # user expresses interest in brief but they are not an assessed seller
