@@ -24,7 +24,14 @@ references:
     root: .
     paths:
       - ~
-
+  required_test_jobs: &required_test_jobs
+    requires:
+      - check_styles
+      - run_tests_other
+      - run_tests_briefs
+      - run_tests_framework
+      - run_tests_services
+  
 jobs:
   build:
     docker:
@@ -214,44 +221,28 @@ workflows:
             tags:
               only: /release-.*/
       - deploy_to_rc:
-          requires:
-            - run_tests_other
-            - run_tests_briefs
-            - run_tests_framework
-            - run_tests_services
+          <<: *required_test_jobs
           filters:
             tags:
               ignore: /.*/
             branches:
               only: rc
       - deploy_to_staging:
-          requires:
-            - run_tests_other
-            - run_tests_briefs
-            - run_tests_framework
-            - run_tests_services
+          <<: *required_test_jobs
           filters:
             tags:
               ignore: /.*/
             branches:
               only: master
       - deploy_to_production:
-          requires:
-            - run_tests_other
-            - run_tests_briefs
-            - run_tests_framework
-            - run_tests_services
+          <<: *required_test_jobs
           filters:
             tags:
               only: /release-.*/
             branches:
               ignore: /.*/
       - deploy_to_production_clone:
-          requires:
-            - run_tests_other
-            - run_tests_briefs
-            - run_tests_framework
-            - run_tests_services
+          <<: *required_test_jobs
           filters:
             tags:
               only: /release-.*/
