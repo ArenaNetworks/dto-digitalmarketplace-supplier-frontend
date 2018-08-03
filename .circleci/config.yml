@@ -1,10 +1,10 @@
 version: 2
 references:
-  venv-cache-key: &venv-cache-key
+  venv_cache_key: &venv_cache_key
     key: venv-cache-{{ checksum "requirements.txt" }}-{{ checksum "requirements_for_test.txt" }}
-  npm-cache-key: &npm-cache-key
+  npm_cache_key: &npm_cache_key
     key: npm-cache-{{ checksum "package.json" }}
-  cf-install: &cf-install
+  cf_install: &cf_install
     run:
       name: Install Cloud Foundry CLI
       command: |
@@ -13,76 +13,122 @@ references:
         cf install-plugin https://github.com/govau/autopilot/releases/download/0.0.5-venapp/autopilot-linux -f
         cf install-plugin https://github.com/govau/cf-run-and-wait/releases/download/0.1/run-and-wait.linux64 -f
         cf -v
-  deploy-docker: &deploy-docker
+  deploy_docker: &deploy_docker
     docker:
-      - image: circleci/python:2.7.15-stretch
+      - image: circleci/python:2.7.15-stretch-node
         environment:
           TZ: "/usr/share/zoneinfo/Australia/Sydney"
+  attach_workspace_root: &attach_workspace_root
+    at: .
+  persist_workspace_root: &persist_workspace_root
+    root: .
+    paths:
+      - ~
 
 jobs:
   build:
     docker:
-      - image: circleci/python:2.7.15-stretch-node-browsers
-        environment:
-          TZ: "/usr/share/zoneinfo/Australia/Sydney"
+    <<: *deploy_docker
     steps:
-      - checkout
       - attach_workspace:
-          at: .
+          <<: *attach_workspace_root
+      - checkout
 
       - restore_cache:
-          <<: *venv-cache-key
+          <<: *venv_cache_key
       - run: 
           name: Pip Install
           command: |
             virtualenv venv
             source venv/bin/activate
             pip install -r requirements_for_test.txt
+            pip uninstall -y pytest-sugar
       - save_cache:
-          <<: *venv-cache-key
+          <<: *venv_cache_key
           paths:
             - venv
 
       - restore_cache:
-          <<: *npm-cache-key
+          <<: *npm_cache_key
       - run: 
           name: Npm Install
           command: |
             npm install
+            node_modules/.bin/pancake
             npm run frontend-install
       - save_cache:
-          <<: *npm-cache-key
+          <<: *npm_cache_key
           paths:
             - node_modules
 
+      - run: 
+          name: Npm Build
+          command: |
+            npm run frontend-build:production
+      - persist_to_workspace:
+          <<: *persist_workspace_root
+
+  check_styles:
+    <<: *deploy_docker
+    steps:
+      - attach_workspace:
+          <<: *attach_workspace_root
       - run: 
           name: Check Styles
           command: |
             source venv/bin/activate
             pycodestyle
 
-      - run: 
-          name: Npm Build
-          command: |
-            npm run frontend-build:production
-
+  run_tests_other:
+    <<: *deploy_docker
+    steps:
+      - attach_workspace:
+          <<: *attach_workspace_root
       - run: 
           name: Run Tests
           command: |
             source venv/bin/activate
-            py.test tests
+            py.test --ignore=tests/app/main/test_briefs.py --ignore=tests/app/main/test_frameworks.py --ignore=tests/app/main/test_services.py tests
 
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ~
+  run_tests_briefs:
+    <<: *deploy_docker
+    steps:
+      - attach_workspace:
+          <<: *attach_workspace_root
+      - run: 
+          name: Run Tests
+          command: |
+            source venv/bin/activate
+            py.test tests/app/main/test_briefs.py
+
+  run_tests_framework:
+    <<: *deploy_docker
+    steps:
+      - attach_workspace:
+          <<: *attach_workspace_root
+      - run: 
+          name: Run Tests
+          command: |
+            source venv/bin/activate
+            py.test tests/app/main/test_frameworks.py
+
+  run_tests_services:
+    <<: *deploy_docker
+    steps:
+      - attach_workspace:
+          <<: *attach_workspace_root
+      - run: 
+          name: Run Tests
+          command: |
+            source venv/bin/activate
+            py.test tests/app/main/test_services.py
 
   deploy_to_rc:
-    <<: *deploy-docker
+    <<: *deploy_docker
     steps:
       - attach_workspace:
           at: .
-      - *cf-install
+      - *cf_install
       - run:
           name: Deploy to RC
           command: |
@@ -91,11 +137,11 @@ jobs:
             # cf zero-downtime-push dm-rc-admin -f manifest.rc.yml --show-app-log
 
   deploy_to_production_clone:
-    <<: *deploy-docker
+    <<: *deploy_docker
     steps:
       - attach_workspace:
           at: .
-      - *cf-install
+      - *cf_install
       - run:
           name: Deploy to Production Clone
           command: |
@@ -104,31 +150,29 @@ jobs:
             # cf zero-downtime-push dm-dev-admin -f manifest.production.clone.yml --show-app-log
 
   deploy_to_staging:
-    <<: *deploy-docker
+    <<: *deploy_docker
     steps:
       - attach_workspace:
           at: .
-      - *cf-install
+      - *cf_install
       - run:
           name: Deploy to Staging
           command: |
             cf login -a https://api.system.y.cld.gov.au -o dta -s marketplace -u $CF_USER_STAGING -p $CF_PASSWORD_STAGING
-            cf zero-downtime-push dm-dev-supplier -f service.gov.au-manifest.staging.yml --show-app-log
-            scripts/ci-notify.sh
+            cf zero-downtime-push dm-dev-supplier -f manifest.staging.yml --show-app-log
 
   deploy_to_production:
-    <<: *deploy-docker
+    <<: *deploy_docker
     steps:
       - attach_workspace:
           at: .
-      - *cf-install
+      - *cf_install
       - run:
           name: Deploy to Production
           command: |
-            echo Deploy to Production
-            # cf login -a https://api.system.b.cld.gov.au -o dta -s marketplace -u $CF_USER_PROD -p $CF_PASSWORD_PROD
-            # cf zero-downtime-push dm-supplier -f service.gov.au-manifest.production.yml --show-app-log
-            # ./scripts/ci-notify.sh
+            cf login -a https://api.system.b.cld.gov.au -o dta -s marketplace -u $CF_USER_PROD -p $CF_PASSWORD_PROD
+            cf zero-downtime-push dm-supplier -f manifest.production.yml --show-app-log
+            scripts/ci-notify.sh
 
 
 workflows:
@@ -139,9 +183,42 @@ workflows:
           filters:
             tags:
               only: /release-.*/
-      - deploy_to_rc:
+      - check_styles:
           requires:
             - build
+          filters:
+            tags:
+              only: /release-.*/
+      - run_tests_other:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /release-.*/
+      - run_tests_briefs:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /release-.*/
+      - run_tests_framework:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /release-.*/
+      - run_tests_services:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /release-.*/
+      - deploy_to_rc:
+          requires:
+            - run_tests_other
+            - run_tests_briefs
+            - run_tests_framework
+            - run_tests_services
           filters:
             tags:
               ignore: /.*/
@@ -149,7 +226,10 @@ workflows:
               only: rc
       - deploy_to_staging:
           requires:
-            - build
+            - run_tests_other
+            - run_tests_briefs
+            - run_tests_framework
+            - run_tests_services
           filters:
             tags:
               ignore: /.*/
@@ -157,7 +237,10 @@ workflows:
               only: master
       - deploy_to_production:
           requires:
-            - build
+            - run_tests_other
+            - run_tests_briefs
+            - run_tests_framework
+            - run_tests_services
           filters:
             tags:
               only: /release-.*/
@@ -165,7 +248,10 @@ workflows:
               ignore: /.*/
       - deploy_to_production_clone:
           requires:
-            - build
+            - run_tests_other
+            - run_tests_briefs
+            - run_tests_framework
+            - run_tests_services
           filters:
             tags:
               only: /release-.*/
