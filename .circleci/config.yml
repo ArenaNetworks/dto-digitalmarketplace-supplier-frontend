@@ -24,7 +24,7 @@ references:
     root: .
     paths:
       - ~
-  required_test_jobs: &required_test_jobs
+  required_for_deploy: &required_for_deploy
     requires:
       - check_styles
       - run_tests_other
@@ -221,28 +221,28 @@ workflows:
             tags:
               only: /release-.*/
       - deploy_to_rc:
-          <<: *required_test_jobs
+          <<: *required_for_deploy
           filters:
             tags:
               ignore: /.*/
             branches:
               only: rc
       - deploy_to_staging:
-          <<: *required_test_jobs
+          <<: *required_for_deploy
           filters:
             tags:
               ignore: /.*/
             branches:
               only: master
       - deploy_to_production:
-          <<: *required_test_jobs
+          <<: *required_for_deploy
           filters:
             tags:
               only: /release-.*/
             branches:
               ignore: /.*/
       - deploy_to_production_clone:
-          <<: *required_test_jobs
+          <<: *required_for_deploy
           filters:
             tags:
               only: /release-.*/
