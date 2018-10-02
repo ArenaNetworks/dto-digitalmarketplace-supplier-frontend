@@ -48,6 +48,12 @@ def create_app(config_name):
 
     init_frontend_app(application, data_api_client, login_manager)
 
+    @login_manager.user_loader
+    def load_user(user_id):
+        if request.path.startswith(asset_path):
+            return
+        return User.load_user(data_api_client, user_id)
+
     @application.context_processor
     def extra_template_variables():
         return {
