@@ -2111,7 +2111,7 @@ class TestReturnSignedAgreement(BaseApplicationTest):
                     self.url_for('main.signature_upload', framework_slug='g-cloud-8'),
                     data={
                         'csrf_token': FakeCsrf.valid_token,
-                        'signature_page': (StringIO(b''), ''),
+                        'signature_page': (StringIO(b'asdf'), 'test.pdf'),
                     }
                 )
                 assert res.status_code == 302
