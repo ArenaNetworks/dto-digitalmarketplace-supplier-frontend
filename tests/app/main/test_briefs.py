@@ -675,7 +675,8 @@ class TestCreateResponseToBrief(BaseApplicationTest):
         with self.app.test_client():
             self.login(application_id=1)
 
-    def test_create_new_brief_response(self, data_api_client, upload_service_documents, S3):
+    @mock.patch('app.main.views.briefs.send_email', autospec=True)
+    def test_create_new_brief_response(self, send_email, data_api_client, upload_service_documents, S3):
         upload_service_documents.return_value = ({}, None)
         data_api_client.get_brief.return_value = self.brief
         data_api_client.get_framework.return_value = self.framework
@@ -692,12 +693,14 @@ class TestCreateResponseToBrief(BaseApplicationTest):
             data=brief_form_submission
         )
         expected_location = self.url_for('main.view_response_result', brief_id=1234, result='success', _external=True)
+        assert send_email.called
         assert res.status_code == 302
         assert res.location == expected_location
         data_api_client.create_brief_response.assert_called_once_with(
             1234, 1234, processed_brief_submission, 'email@email.com')
 
-    def test_create_new_brief_response_shows_result_page_for_not_all_essentials(self, data_api_client,
+    @mock.patch('app.main.views.briefs.send_email', autospec=True)
+    def test_create_new_brief_response_shows_result_page_for_not_all_essentials(self, send_email, data_api_client,
                                                                                 upload_service_documents, S3):
         upload_service_documents.return_value = ({}, None)
         data_api_client.get_brief.return_value = self.brief
@@ -715,6 +718,7 @@ class TestCreateResponseToBrief(BaseApplicationTest):
             self.url_for('main.brief_response', brief_id=1234),
             data=brief_form_submission
         )
+        assert send_email.called
         assert res.status_code == 302
         assert res.location == self.url_for(
             'main.view_response_result',
