@@ -12,8 +12,8 @@ contextlib2==0.5.4
 cryptography==2.3
 cssselect==1.0.1
 docutils==0.13.1
-git+https://github.com/AusDTO/dto-digitalmarketplace-apiclient.git@5f9a929f3b1e2a66e85caaaf5c1e053d34223d0f#egg=dto_digitalmarketplace_apiclient==whatever
-git+https://github.com/AusDTO/dto-digitalmarketplace-content-loader.git@663ca400be81deeb4aec40445e45889e9ed1663e#egg=dto_digitalmarketplace_content_loader==whatever
+git+https://github.com/AusDTO/dto-digitalmarketplace-apiclient.git@7e145229335408ed0522577f8e4b521a3e399a04#egg=dto_digitalmarketplace_apiclient==whatever
+git+https://github.com/AusDTO/dto-digitalmarketplace-content-loader.git@338fa3cab7f9e9a7dee56b5e05b6d47af62b6a10#egg=dto_digitalmarketplace_content_loader==whatever
 git+https://github.com/AusDTO/dto-digitalmarketplace-utils.git@d42d52c9ddc9d3a5fad860526f572b4d0d2aa76f#egg=dto_digitalmarketplace_utils==whatever
 enum34==1.1.6
 Flask==1.0.2
