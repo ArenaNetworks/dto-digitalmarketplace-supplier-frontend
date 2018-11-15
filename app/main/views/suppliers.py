@@ -106,7 +106,13 @@ def supplier_edit(step=None, substep=None):
         }
     })
 
-    return redirect(url_for('.render_application', id=application['application']['id'], step='start'))
+    errors = application.get('application_errors')
+    next_step = 'start'
+    if errors:
+        first = errors[0]
+        next_step = first.get('step')
+
+    return redirect(url_for('.render_application', id=application['application']['id'], step=next_step))
 
 
 @main.route('/update', methods=['GET'])
