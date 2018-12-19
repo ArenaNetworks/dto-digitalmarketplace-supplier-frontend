@@ -280,8 +280,6 @@ def download_single_file(id, slug):
     application = data_api_client.get_application(id)
     if not can_user_view_application(application) and not current_user.has_role('admin'):
         abort(403, 'Not authorised to access application')
-    if is_application_submitted(application) and not current_user.has_role('admin'):
-        abort(400, 'Application already submitted')
 
     file = s3_download_file(slug, os.path.join(S3_PATH, str(id)))
 
