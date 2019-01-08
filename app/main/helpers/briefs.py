@@ -29,7 +29,13 @@ def is_supplier_selected_for_brief(data_api_client, current_user, brief):
     current_user_domain = domain(current_user.email_address) \
         if domain(current_user.email_address) not in current_app.config.get('GENERIC_EMAIL_DOMAINS') \
         else None
-
+    if brief.get('lot', '') == 'rfx':
+        if (hasattr(current_user, 'role') and
+           current_user.role == 'supplier' and
+           str(current_user.supplier_code) in brief.get('sellers', {}).keys()):
+            return True
+        else:
+            return False
     if brief.get('sellerSelector', '') == 'allSellers':
         return True
     if brief.get('sellerSelector', '') == 'someSellers':
