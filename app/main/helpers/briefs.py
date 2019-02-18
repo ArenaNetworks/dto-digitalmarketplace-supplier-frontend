@@ -29,6 +29,20 @@ def is_supplier_selected_for_brief(data_api_client, current_user, brief):
     current_user_domain = domain(current_user.email_address) \
         if domain(current_user.email_address) not in current_app.config.get('GENERIC_EMAIL_DOMAINS') \
         else None
+    if brief.get('lot', '') == 'atm':
+        if hasattr(current_user, 'role') and current_user.role == 'supplier':
+            brief_category = brief.get('sellerCategory', '')
+            supplier = data_api_client.get_supplier(current_user.supplier_code)['supplier']
+            open_to = brief.get('openTo', '')
+            area_of_expertise = brief.get('areaOfExpertise', '')
+            if (supplier and
+               (open_to == 'all' and len(supplier['domains']['assessed']) > 0) or
+               (open_to == 'category' and area_of_expertise and area_of_expertise in supplier['domains']['assessed'])):
+                return True
+            else:
+                return False
+        else:
+            return False
     if brief.get('lot', '') == 'rfx':
         if (hasattr(current_user, 'role') and
            current_user.role == 'supplier' and
