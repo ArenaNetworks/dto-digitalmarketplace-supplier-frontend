@@ -162,7 +162,8 @@ def send_thank_you_email_to_responders(brief, brief_response, brief_response_url
         essential_requirements=ess,
         nice_to_have_requirements=nth,
         brief_response=brief_response,
-        brief_response_url=brief_response_url
+        brief_response_url=brief_response_url,
+        frontend_address=current_app.config['FRONTEND_ADDRESS']
     )
 
     try:

@@ -135,6 +135,7 @@ def send_brief_clarification_question(data_api_client, brief, clarification_ques
         framework_slug=brief['frameworkSlug'],
         lot_slug=brief['lotSlug'],
         message=clarification_question,
+        frontend_address=current_app.config['FRONTEND_ADDRESS']
     )
     try:
         send_email(
@@ -167,6 +168,7 @@ def send_brief_clarification_question(data_api_client, brief, clarification_ques
         framework_slug=brief['frameworkSlug'],
         message=clarification_question,
         supplier_name=current_user.name,
+        frontend_address=current_app.config['FRONTEND_ADDRESS']
     )
     try:
         send_email(

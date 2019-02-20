@@ -70,6 +70,8 @@ class Config(object):
     RESET_PASSWORD_SALT = 'ResetPasswordSalt'
     SUPPLIER_INVITE_TOKEN_SALT = 'SupplierInviteEmail'
 
+    # used within links in email templates to point to the site's domain - see MAR-2863
+    FRONTEND_ADDRESS = 'http://localhost:8000'
     ASSET_PATH = URL_PREFIX + '/static'
 
     FEATURE_FLAGS = {
@@ -157,6 +159,7 @@ class Live(Config):
     DM_GA_CODE = 'UA-72722909-5'
     DM_CACHE_TYPE = 'prod'
     SERVER_NAME = 'marketplace.service.gov.au'
+    FRONTEND_ADDRESS = 'https://marketplace.service.gov.au'
 
     DM_FRAMEWORK_AGREEMENTS_EMAIL = 'no-reply@marketplace.digital.gov.au'
 
