@@ -171,8 +171,11 @@ def create_application(token):
 def my_application():
     # if an applicant has no application, create a new one for them
     if current_user.role == 'applicant' and current_user.application_id is None:
-        application = data_api_client.create_application(
-            {'status': 'saved', 'framework': 'digital-marketplace'})['application']
+        application = data_api_client.req.applications().post({
+            'application': {'status': 'saved', 'framework': 'digital-marketplace'},
+            'updated_by': current_user.email_address,
+            'name': current_user.name
+        })['application']
         data_api_client.req.users(current_user.id).post({'users': {'application_id': application['id']},
                                                          'updated_by': current_user.email_address})
     else:
