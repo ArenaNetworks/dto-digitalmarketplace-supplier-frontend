@@ -80,7 +80,8 @@ def ask_brief_clarification_question(brief_id):
             clarification_question_value = clarification_question
             error_message = "Question must be no more than 100 words"
         else:
-            send_brief_clarification_question(data_api_client, brief, clarification_question)
+            supplier = data_api_client.get_supplier(current_user.supplier_code)['supplier']
+            send_brief_clarification_question(data_api_client, brief, supplier, clarification_question)
             flash('message_sent', 'success')
 
     status_code = 200 if not error_message else 400

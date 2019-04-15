@@ -125,23 +125,22 @@ def supplier_is_unassessed(supplier, domain):
         domain in supplier['supplier']['domains']['unassessed']
 
 
-def send_brief_clarification_question(data_api_client, brief, clarification_question):
+def send_brief_clarification_question(data_api_client, brief, supplier, clarification_question):
     # Email the question to brief owners
     email_body = render_template(
         "emails/brief_clarification_question.html",
-        brief_id=brief['id'],
+        brief_url='{}/2/digital-marketplace/opportunities/{}'.format(
+            current_app.config['FRONTEND_ADDRESS'], brief['id']
+        ),
         brief_name=brief['title'],
-        publish_by_date=brief['clarificationQuestionsPublishedBy'],
-        framework_slug=brief['frameworkSlug'],
-        lot_slug=brief['lotSlug'],
-        message=clarification_question,
-        frontend_address=current_app.config['FRONTEND_ADDRESS']
+        supplier_name=supplier['name'],
+        message=clarification_question
     )
     try:
         send_email(
             to_email_addresses=get_brief_user_emails(brief),
             email_body=email_body,
-            subject=u"You’ve received a new supplier question about ‘{}’".format(brief['title']),
+            subject=u"You received a new question on ‘{}’".format(brief['title']),
             from_email=current_app.config['CLARIFICATION_EMAIL_FROM'],
             from_name="{} Supplier".format(brief['frameworkName'])
         )
@@ -163,12 +162,13 @@ def send_brief_clarification_question(data_api_client, brief, clarification_ques
     # Send the supplier a copy of the question
     supplier_email_body = render_template(
         "emails/brief_clarification_question_confirmation.html",
-        brief_id=brief['id'],
+        brief_url='{}/2/digital-marketplace/opportunities/{}'.format(
+            current_app.config['FRONTEND_ADDRESS'], brief['id']
+        ),
         brief_name=brief['title'],
-        framework_slug=brief['frameworkSlug'],
         message=clarification_question,
-        supplier_name=current_user.name,
-        frontend_address=current_app.config['FRONTEND_ADDRESS']
+        supplier_name=supplier['name'],
+        buyer_organisation=brief['organisation']
     )
     try:
         send_email(

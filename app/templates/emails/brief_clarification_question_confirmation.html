@@ -4,24 +4,33 @@
     <meta charset="UTF-8">
 </head>
 <body>
-  <p>Hi {{ supplier_name }},</p>
+  <p>Hi {{ supplier_name }} team,</p>
 
-  <p>Your question about ‘{{ brief_name }}’ has been sent.</p>
+  <p>We've sent your question on <a href="{{ brief_url }}">{{ brief_name }}</a> to <strong>{{ buyer_organisation }}</strong>.</p>
 
-  <p>You asked:</p>
-
-  <div>
-  ‘{{ message }}’
-  </div>
-
-  <p>
-  Your question will be posted with the buyer’s answer on the <a href="{{ frontend_address }}{{ config['BASE_PREFIX'] }}/{{ framework_slug }}/opportunities/{{ brief_id }}">'{{ brief_name }}' page</a>.
+  <P>You asked:<br />
+    ‘{{ message }}’
   </p>
 
-  <p>
-  Thanks,<br />
-  The Marketplace team</p> 
-  <p><strong>Your feedback shapes the Marketplace</strong><br /> 
-   The Digital Marketplace is an agile development. This means it evolves over time in response to user needs. If you have any questions, feedback or would like to take part in user research, please email <a href="mailto:marketplace@digital.gov.au">marketplace@digital.gov.au</a>.</p>
+  <p><strong>{{ buyer_organisation }}</strong> has sole discretion to answer questions related to this opportunity.</p>
+
+  <p>All published questions and answers can be viewed by sellers eligible to respond to the opportunity.</p>
+
+  <p>To view questions and answers:</p>
+  <ol>
+    <li><a href="https://marketplace.service.gov.au/login">Log in</a> to the Marketplace.</li>
+    <li>Go to the opportunity page: <a href="{{ brief_url }}">{{ brief_url }}</a></li>
+    <li>Scroll down to ‘Seller questions’ section.</li>
+  </ol>
+
+  <p>We recommend to check the ‘Seller question’ section to help inform your response.</p>
+
+  <p>If you have any questions or need guidance, please <a href="https://marketplace.service.gov.au/contact-us">contact the Marketplace</a>.</p>
+  
+  <p>Regards,<br />
+    The Digital Marketplace team<br />
+    Digital Transformation Agency<br />
+    <a href="https://marketplace.service.gov.au">marketplace.service.gov.au</a> | <a href="https://dta.gov.au">dta.gov.au</a>
+  </p>
 </body>
 </html>
