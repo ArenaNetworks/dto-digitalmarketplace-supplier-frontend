@@ -129,8 +129,9 @@ def send_brief_clarification_question(data_api_client, brief, supplier, clarific
     # Email the question to brief owners
     email_body = render_template(
         "emails/brief_clarification_question.html",
-        brief_url='{}/2/digital-marketplace/opportunities/{}'.format(
-            current_app.config['FRONTEND_ADDRESS'], brief['id']
+        answer_question_url=(
+            '{}/login?next=%2Fbuyers%2Fframeworks%2Fdigital-marketplace%2Frequirements%2Fatm%2F{}%2F\
+            supplier-questions%2Fanswer-question'.format(current_app.config['FRONTEND_ADDRESS'], brief['id'])
         ),
         brief_name=brief['title'],
         supplier_name=supplier['name'],
