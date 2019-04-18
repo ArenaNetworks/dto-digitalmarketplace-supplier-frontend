@@ -131,7 +131,9 @@ def send_brief_clarification_question(data_api_client, brief, supplier, clarific
         "emails/brief_clarification_question.html",
         answer_question_url=(
             '{}/login?next=%2Fbuyers%2Fframeworks%2Fdigital-marketplace%2Frequirements%2Fatm%2F{}%2F\
-            supplier-questions%2Fanswer-question'.format(current_app.config['FRONTEND_ADDRESS'], brief['id'])
+supplier-questions%2Fanswer-question'.format(
+                current_app.config['FRONTEND_ADDRESS'], brief['id']
+            )
         ),
         brief_name=brief['title'],
         supplier_name=supplier['name'],
