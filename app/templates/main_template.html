@@ -35,6 +35,12 @@
 
   <header role="banner" class="{% block header_class %}{% endblock %} au-grid au-body">
     <section>
+      {% if current_user.is_authenticated %}
+        {% set userType = current_user.role %}
+      {% else %}
+        {% set userType = '' %}
+      {% endif %}
+
       {% set dashboardText = 'Dashboard' %}
       {% if current_user.role == 'buyer' %}
         {% set dashboardUrl = config['BASE_PREFIX'] + '/sellers' %}
@@ -53,7 +59,8 @@
         'dashboardUrl': dashboardUrl,
         'dashboardText': dashboardText,
         'logoutUrl': config['BASE_PREFIX'] + '/logout',
-        'isAuthenticated': current_user.is_authenticated
+        'isAuthenticated': current_user.is_authenticated,
+        'userType': userType
         } %}
       {% set auth_component = render_component('bundles/Header/AuthWidget.js', props, True) %}
       {{ auth_component|as('react_bundle') }}
