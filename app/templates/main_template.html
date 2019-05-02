@@ -41,23 +41,12 @@
         {% set userType = '' %}
       {% endif %}
 
-      {% set dashboardText = 'Dashboard' %}
-      {% if current_user.role == 'buyer' %}
-        {% set dashboardUrl = config['BASE_PREFIX'] + '/sellers' %}
-      {% elif current_user.role == 'applicant'  %}
-        {% set dashboardText = 'Continue application' %}
-        {% set dashboardUrl = '/sellers/application' %}
-      {% else %}
-        {% set dashboardUrl = '/sellers' %}
-      {% endif %}
       {% set registerUrl = config['BASE_PREFIX'] + '/sellers/signup' %}
       {% set registerText = 'Join the Marketplace' %}
         {% set props = {
         'registerUrl': registerUrl,
         'registerText': registerText,
         'loginUrl': config['BASE_PREFIX'] + '/login',
-        'dashboardUrl': dashboardUrl,
-        'dashboardText': dashboardText,
         'logoutUrl': config['BASE_PREFIX'] + '/logout',
         'isAuthenticated': current_user.is_authenticated,
         'userType': userType
