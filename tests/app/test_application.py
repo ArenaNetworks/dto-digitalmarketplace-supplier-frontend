@@ -25,7 +25,7 @@ class TestApplication(BaseApplicationTest):
         assert self.url_for('main.create_new_supplier', _external=True) == response.location
 
     @mock.patch('app.main.views.suppliers.data_api_client')
-    def test_503(self, data_api_client):
+    def test_301(self, data_api_client):
         with self.app.test_client():
             self.login()
 
@@ -33,13 +33,7 @@ class TestApplication(BaseApplicationTest):
             self.app.config['DEBUG'] = False
 
             res = self.client.get(self.url_for('main.dashboard'))
-            assert_equal(503, res.status_code)
-            assert_true(
-                u"Sorry, we’re experiencing technical difficulties"
-                in res.get_data(as_text=True))
-            assert_true(
-                "Try again later."
-                in res.get_data(as_text=True))
+            assert_equal(301, res.status_code)
 
     def test_header_xframeoptions_set_to_deny(self):
         response = self.client.get(self.url_for('main.create_new_supplier'))

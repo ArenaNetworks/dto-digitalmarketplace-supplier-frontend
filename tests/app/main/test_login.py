@@ -72,8 +72,7 @@ class TestInviteUser(BaseApplicationTest):
                     'email_address': 'this@isvalid.com',
                 }
             )
-            assert res.status_code == 302
-            assert res.location == self.url_for('main.list_users', _external=True)
+            assert res.status_code == 200
 
     @mock.patch('app.main.views.login.data_api_client')
     @mock.patch('app.main.views.login.send_email')
@@ -107,7 +106,7 @@ class TestInviteUser(BaseApplicationTest):
                     'csrf_token': FakeCsrf.valid_token,
                     'email_address': 'this@isvalid.com',
                 })
-            assert res.status_code == 302
+            assert res.status_code == 200
             supplier_token_mock.assert_called_once_with(
                 name='',
                 email_address='this@isvalid.com',
@@ -155,7 +154,6 @@ class TestInviteUser(BaseApplicationTest):
 
             self.login()
 
-            self.app.config['INVITE_EMAIL_SUBJECT'] = "SUBJECT"
             self.app.config['INVITE_EMAIL_FROM'] = "EMAIL FROM"
             self.app.config['INVITE_EMAIL_NAME'] = "EMAIL NAME"
 
@@ -168,12 +166,12 @@ class TestInviteUser(BaseApplicationTest):
                 }
             )
 
-            assert res.status_code == 302
+            assert res.status_code == 200
 
             send_email.assert_called_once_with(
                 "email@email.com",
                 mock.ANY,
-                "SUBJECT",
+                'Invitation to join Supplier Name as a team member',
                 "EMAIL FROM",
                 "EMAIL NAME",
             )
@@ -193,7 +191,7 @@ class TestInviteUser(BaseApplicationTest):
                 }
             )
 
-            assert res.status_code == 302
+            assert res.status_code == 200
 
             data_api_client.create_audit_event.assert_called_once_with(
                 audit_type=AuditTypes.invite_user,
@@ -447,8 +445,8 @@ class TestCreateUser(BaseApplicationTest):
         )
 
         assert res.status_code == 400
-        assert u"You were invited by ‘Different Supplier Name’" in res.get_data(as_text=True)
-        assert u"Your account is registered with ‘Supplier Name’" in res.get_data(as_text=True)
+        assert u"You can only use your existing account with one company." in res.get_data(as_text=True)
+        assert u"You already have an existing account with Supplier Name" in res.get_data(as_text=True)
 
     @mock.patch('app.main.views.login.data_api_client')
     def test_should_return_an_error_if_user_is_already_a_supplier(self, data_api_client):

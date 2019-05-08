@@ -82,67 +82,7 @@ def get_user():
     }]
 
 
-class TestSuppliersDashboard(BaseApplicationTest):
-    @mock.patch("app.main.views.suppliers.data_api_client")
-    @mock.patch("app.main.views.suppliers.get_current_suppliers_users")
-    def test_error_and_success_flashed_messages_only_are_shown_in_banner_messages(
-        self, get_current_suppliers_users, data_api_client
-    ):
-        with self.client.session_transaction() as session:
-            session['_flashes'] = [
-                ('error', 'This is an error'),
-                ('success', 'This is a success'),
-                ('flag', 'account-created')
-            ]
-
-        data_api_client.get_framework.return_value = self.framework('open')
-        data_api_client.get_supplier.side_effect = get_supplier
-        data_api_client.find_audit_events.return_value = {
-            "auditEvents": []
-        }
-        get_current_suppliers_users.side_effect = get_user
-        with self.app.test_client():
-            self.login()
-
-            res = self.client.get(self.url_for('main.dashboard'))
-            data = self.strip_all_whitespace(res.get_data(as_text=True))
-
-            assert_in('<pclass="banner-message">Thisisanerror</p>', data)
-            assert_in('<pclass="banner-message">Thisisasuccess</p>', data)
-            assert_not_in('<pclass="banner-message">account-created</p>', data)
-
-
 class TestSupplierDashboardLogin(BaseApplicationTest):
-    @mock.patch("app.main.views.suppliers.data_api_client")
-    @mock.patch("app.main.views.suppliers.get_current_suppliers_users")
-    def test_should_show_supplier_dashboard_logged_in(
-            self, get_current_suppliers_users, data_api_client
-    ):
-        get_current_suppliers_users.side_effect = get_user
-        with self.app.test_client():
-            self.login()
-            data_api_client.authenticate_user.return_value = self.user(
-                123, "email@email.com", 1234, "Supplier Name", "Name")
-
-            data_api_client.get_user.return_value = self.user(
-                123, "email@email.com", 1234, "Supplier Name", "Name")
-
-            data_api_client.find_frameworks.return_value = find_frameworks_return_value
-
-            data_api_client.get_supplier.side_effect = get_supplier
-
-            res = self.client.get(self.url_for('main.dashboard'))
-
-            assert_equal(res.status_code, 200)
-
-            assert self.strip_all_whitespace('>Supplier Name</h1>') in \
-                self.strip_all_whitespace(res.get_data(as_text=True))
-
-            assert_in(
-                self.strip_all_whitespace("email@email.com"),
-                self.strip_all_whitespace(res.get_data(as_text=True))
-            )
-
     def test_should_redirect_to_login_if_not_logged_in(self):
         dashboard_url = self.url_for('main.dashboard')
         res = self.client.get(dashboard_url)

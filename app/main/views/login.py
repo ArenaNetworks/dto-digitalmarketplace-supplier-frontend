@@ -122,24 +122,31 @@ def invite_user():
 def send_invite_user():
     form = EmailAddressForm(request.form)
     if form.validate():
+        email_address = form.email_address.data
         token = generate_supplier_invitation_token(
             name='',
             supplier_code=current_user.supplier_code,
             supplier_name=current_user.supplier_name,
-            email_address=form.email_address.data
+            email_address=email_address
         )
         url = url_for('main.create_user', token=token, _external=True)
         email_body = render_template(
             'emails/invite_user_email.html',
             url=url,
             user=current_user.name,
-            supplier=current_user.supplier_name)
+            supplier=current_user.supplier_name,
+            generic_contact_email=current_app.config['GENERIC_CONTACT_EMAIL'])
 
         try:
             send_email(
-                form.email_address.data,
+                email_address,
                 email_body,
-                current_app.config['INVITE_EMAIL_SUBJECT'],
+                'Invitation to join {} as a team member'.format(
+                    current_user
+                    .supplier_name
+                    .encode("ascii", "ignore")
+                    .decode('ascii')
+                ),
                 current_app.config['INVITE_EMAIL_FROM'],
                 current_app.config['INVITE_EMAIL_NAME']
             )
@@ -158,11 +165,13 @@ def send_invite_user():
             user=current_user.email_address,
             object_type='suppliers',
             object_id=current_user.supplier_code,
-            data={'invitedEmail': form.email_address.data},
+            data={'invitedEmail': email_address},
         )
-
-        flash('user_invited', 'success')
-        return redirect(url_for('.list_users'))
+        form.email_address.data = None
+        return render_template_with_csrf(
+            'auth/submit_email_address.html',
+            form=form,
+            invited_user=email_address)
     else:
         return render_template_with_csrf(
             'auth/submit_email_address.html',

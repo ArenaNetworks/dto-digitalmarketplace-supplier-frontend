@@ -34,64 +34,7 @@ from dmutils.logging import notify_team
 @main.route('')
 @login_required
 def dashboard():
-    supplier = data_api_client.get_supplier(
-        current_user.supplier_code
-    )['supplier']
-    supplier['contact'] = supplier['contacts'][0] if supplier['contacts'] else None
-
-    all_frameworks = sorted(
-        data_api_client.find_frameworks()['frameworks'],
-        key=lambda framework: framework['slug'],
-        reverse=True
-    )
-    supplier_frameworks = {
-        framework['frameworkSlug']: framework
-        for framework in data_api_client.get_supplier_frameworks(current_user.supplier_code)['frameworkInterest']
-    }
-
-    for framework in all_frameworks:
-        framework.update(
-            supplier_frameworks.get(framework['slug'], {})
-        )
-        dates = {}
-        try:
-            dates = content_loader.get_message(framework['slug'], 'dates')
-        except ContentNotFoundError:
-            pass
-        framework.update({
-            'dates': dates,
-            'deadline': Markup("Deadline: {}".format(dates.get('framework_close_date', ''))),
-            'registered_interest': (framework['slug'] in supplier_frameworks),
-            'made_application': (
-                framework.get('declaration') and
-                framework['declaration'].get('status') == 'complete' and
-                framework.get('complete_drafts_count') > 0
-            ),
-            'needs_to_complete_declaration': (
-                framework.get('onFramework') and
-                framework.get('agreementReturned') is False
-            )
-        })
-
-    digital_marketplace_panel = False
-    digital_marketplace_framework = data_api_client.req.frameworks('digital-marketplace').get()
-    for framework in supplier.get('frameworks', []):
-        if framework['framework_id'] == digital_marketplace_framework['frameworks']['id']:
-            digital_marketplace_panel = True
-
-    return render_template_with_csrf(
-        "suppliers/dashboard.html",
-        supplier=supplier,
-        users=get_current_suppliers_users(),
-        needs_upgrade=(not digital_marketplace_panel),
-        frameworks={
-            'coming': get_frameworks_by_status(all_frameworks, 'coming'),
-            'open': get_frameworks_by_status(all_frameworks, 'open'),
-            'pending': get_frameworks_by_status(all_frameworks, 'pending'),
-            'standstill': get_frameworks_by_status(all_frameworks, 'standstill', 'made_application'),
-            'live': get_frameworks_by_status(all_frameworks, 'live', 'services_count')
-        }
-    )
+    return redirect('/2/seller-dashboard', 301)
 
 
 @main.route('/edit', methods=['GET'])
@@ -105,12 +48,13 @@ def supplier_edit(step=None, substep=None):
             'email_address': current_user.email_address
         }
     })
-
-    errors = application.get('application_errors')
-    next_step = 'start'
-    if errors:
-        first = errors[0]
-        next_step = first.get('step')
+    next_step = request.args.get('step', None)
+    if not next_step:
+        errors = application.get('application_errors')
+        next_step = 'start'
+        if errors:
+            first = errors[0]
+            next_step = first.get('step')
 
     return redirect(url_for('.render_application', id=application['application']['id'], step=next_step))
 

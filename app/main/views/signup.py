@@ -201,6 +201,7 @@ def submit_application(id):
 
     if application['application']['status'] == 'saved':
         data_api_client.req.applications(id).submit().post(data={'user_id': current_user.id})
+        current_user.notification_count = None
 
     return render_template('suppliers/application_submitted.html',
                            application_type=application['application'].get('type'))

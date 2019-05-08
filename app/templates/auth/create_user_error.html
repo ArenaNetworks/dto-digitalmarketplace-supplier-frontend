@@ -38,15 +38,11 @@
   {% if user.role == 'supplier' and data['supplierCode'] != user.supplier_code %}
 
   <header class="page-heading-smaller">
-    <h1>The details you provided are registered with another supplier.</h1>
+    <h1>{{ data['supplierName'] }} has invited you to join as a team member.</h1>
   </header>
-  <p>You were invited by ‘{{ data['supplierName'] }}’.</p>
-  <p>Your account is registered with ‘{{ user.supplier_name }}’.</p>
-  <br>
-  <p>
-    <a href="/login">Sign in</a> to your {{ user.supplier_name }} account or email
-    <a href="mailto:{{ generic_contact_email }}">{{ generic_contact_email }}</a> to register your account with a different organisation.
-  </p>
+  <p>You already have an existing account with {{ user.supplier_name }}.</p>
+  <p>You can only use your existing account with one company.</p>
+  <p>If you want to switch your account from {{ user.supplier_name }} to {{ data['supplierName'] }}, contact <a href="mailto:{{ generic_contact_email }}">{{ generic_contact_email }}</a>.</p>
 
   {% else %}
 

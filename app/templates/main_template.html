@@ -36,13 +36,16 @@
   <header role="banner" class="{% block header_class %}{% endblock %} au-grid au-body">
     <section>
       {% set dashboardText = 'Dashboard' %}
+      {% set dashboardUrl = '' %}
+      {% set notification_count = '' %}
       {% if current_user.role == 'buyer' %}
         {% set dashboardUrl = config['BASE_PREFIX'] + '/sellers' %}
       {% elif current_user.role == 'applicant'  %}
         {% set dashboardText = 'Continue application' %}
         {% set dashboardUrl = '/sellers/application' %}
-      {% else %}
-        {% set dashboardUrl = '/sellers' %}
+      {% elif current_user.role == 'supplier' %}
+        {% set dashboardUrl = '/2/seller-dashboard' %}
+        {% set notification_count = current_user.notification_count %}
       {% endif %}
       {% set registerUrl = config['BASE_PREFIX'] + '/sellers/signup' %}
       {% set registerText = 'Join the Marketplace' %}
@@ -52,6 +55,7 @@
         'loginUrl': config['BASE_PREFIX'] + '/login',
         'dashboardUrl': dashboardUrl,
         'dashboardText': dashboardText,
+        'notificationCount': notification_count,
         'logoutUrl': config['BASE_PREFIX'] + '/logout',
         'isAuthenticated': current_user.is_authenticated
         } %}

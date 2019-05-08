@@ -14,10 +14,6 @@
       {
         "link": url_for(".dashboard"),
         "label": "Dashboard"
-      },
-      {
-        "link": url_for(".list_users"),
-        "label": "Add or remove contributors"
       }
     ]
   %}
@@ -48,9 +44,21 @@
 {% endfor %}
 {% endif %}
 {% endwith %}
-
+{% if invited_user %}
+<div class="au-body au-page-alerts au-page-alerts--success">
+  <h3>We’ve sent {{invited_user}} an invite to register and join your team.</h3>
+  <p>
+    <div>
+      <a href="{{ url_for('.dashboard') }}" class="au-btn au-btn--secondary" style="border-bottom-width:3px;">
+        Return to dashboard
+      </a>
+    </div>
+  </p>
+</div>
+<br />
+{% endif %}
   {% with
-    heading = "Invite a contributor",
+    heading = "Invite a new team member",
     smaller = true
   %}
     {% include 'toolkit/page-heading.html' %}
@@ -64,9 +72,9 @@
 
             {%
               with
-                question = "Email address",
+                question = "Please enter a valid email address",
                 name = "email_address",
-                hint = "An invite will be sent asking the recipient to register as a contributor.",
+                question_advice = "We'll send an invite to this email address with instructions on how to register as a team member.",
                 value = form.email_address.data,
                 error = form.email_address.errors[0]
             %}
