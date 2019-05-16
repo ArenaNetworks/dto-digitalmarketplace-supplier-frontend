@@ -43,7 +43,7 @@ def is_supplier_selected_for_brief(data_api_client, current_user, brief):
                 return False
         else:
             return False
-    if brief.get('lot', '') == 'rfx':
+    if brief.get('lot', '') in ['rfx', 'specialist']:
         if (hasattr(current_user, 'role') and
            current_user.role == 'supplier' and
            str(current_user.supplier_code) in brief.get('sellers', {}).keys()):
