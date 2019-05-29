@@ -50,6 +50,17 @@ def is_supplier_selected_for_brief(data_api_client, current_user, brief):
             return True
         else:
             return False
+    if brief.get('lot', '') == 'specialist':
+        if (
+            hasattr(current_user, 'role') and
+            current_user.role == 'supplier' and (
+                brief.get('sellerSelector', '') == 'allSellers' or
+                str(current_user.supplier_code) in brief.get('sellers', {}).keys()
+            )
+        ):
+            return True
+        else:
+            return False
     if brief.get('sellerSelector', '') == 'allSellers':
         return True
     if brief.get('sellerSelector', '') == 'someSellers':
@@ -127,6 +138,7 @@ def supplier_is_unassessed(supplier, domain):
 
 def send_brief_clarification_question(data_api_client, brief, clarification_question):
     # Email the question to brief owners
+    subject = u"You received a new question for ‘{}’".format(brief['title'])
     email_body = render_template(
         "emails/brief_clarification_question.html",
         brief_id=brief['id'],
@@ -135,13 +147,14 @@ def send_brief_clarification_question(data_api_client, brief, clarification_ques
         framework_slug=brief['frameworkSlug'],
         lot_slug=brief['lotSlug'],
         message=clarification_question,
-        frontend_address=current_app.config['FRONTEND_ADDRESS']
+        frontend_address=current_app.config['FRONTEND_ADDRESS'],
+        supplier_name=current_user.supplier_name
     )
     try:
         send_email(
             to_email_addresses=get_brief_user_emails(brief),
             email_body=email_body,
-            subject=u"You’ve received a new supplier question about ‘{}’".format(brief['title']),
+            subject=subject,
             from_email=current_app.config['CLARIFICATION_EMAIL_FROM'],
             from_name="{} Supplier".format(brief['frameworkName'])
         )
@@ -165,16 +178,16 @@ def send_brief_clarification_question(data_api_client, brief, clarification_ques
         "emails/brief_clarification_question_confirmation.html",
         brief_id=brief['id'],
         brief_name=brief['title'],
-        framework_slug=brief['frameworkSlug'],
         message=clarification_question,
         supplier_name=current_user.name,
-        frontend_address=current_app.config['FRONTEND_ADDRESS']
+        frontend_address=current_app.config['FRONTEND_ADDRESS'],
+        brief_organisation=brief['organisation']
     )
     try:
         send_email(
             to_email_addresses=[current_user.email_address],
             email_body=supplier_email_body,
-            subject=u"Your question about ‘{}’".format(brief['title']),
+            subject=u"You submitted a question for {} ({}) successfully".format(brief['title'], brief['id']),
             from_email=current_app.config['CLARIFICATION_EMAIL_FROM'],
             from_name=current_app.config['CLARIFICATION_EMAIL_NAME']
         )

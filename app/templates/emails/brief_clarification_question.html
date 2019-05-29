@@ -4,29 +4,27 @@
     <meta charset="UTF-8">
 </head>
 <body>
-  <p>Hello,</p>
+  <p>Dear Marketplace buyer,</p>
   
-  <p>A seller has asked a question about ‘{{ brief_name }}’.</p>
-  
-  <p>They asked:</p>
+  <p>
+    <b>{{supplier_name}}</b> asked a question about <a href="{{ frontend_address }}/digital-marketplace/opportunities/{{brief_id}}">{{brief_name}} ({{brief_id}})</a>:<br />
+    ‘{{ message }}’
+  </p>
 
-  <div>
-  {{ message }}
-  </div>
-  
   <p>
-  You must <a href="{{ frontend_address }}{{ config['BASE_PREFIX'] }}/buyers/frameworks/{{ framework_slug }}/requirements/{{ lot_slug }}/{{ brief_id }}/supplier-questions">publish this question with your answer</a> on the '{{ brief_name }}' page by {{ publish_by_date|dateformat }}.
+  You must <a href="{{ frontend_address }}{{ config['BASE_PREFIX'] }}/buyers/frameworks/{{ framework_slug }}/requirements/{{ lot_slug }}/{{ brief_id }}/supplier-questions">answer this question</a> before {{publish_by_date|dateformat}}.
+  All published questions and answers are visible on the opportunity page.
   </p>
+
   <p>
-  Read how to answer seller questions at:<br />
-  <a href="https://marketplace1.zendesk.com/hc/en-gb/articles/360000575036#while-open">
-    https://marketplace1.zendesk.com/hc/en-gb/articles/360000575036#while-open
-  </a>
+    If you need guidance, please <a href="{{ frontend_address }}/contact-us">contact the Marketplace</a>.
   </p>
+
   <p>
-  Thanks,<br />
-  The Marketplace team
-  <p><strong>Your feedback shapes the Marketplace</strong><br /> 
-   The Digital Marketplace is an agile development. This means it evolves over time in response to user needs. If you have any questions, feedback or would like to take part in user research, please email <a href="mailto:marketplace@digital.gov.au">marketplace@digital.gov.au</a>.</p>
+    Regards,<br />
+    The Digital Marketplace team<br />
+    Digital Transformation Agency<br />
+    <a href="{{ frontend_address }}">marketplace.service.gov.au</a> | <a href="https://dta.gov.au">dta.gov.au</a>
+  </p>
 </body>
 </html>

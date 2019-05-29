@@ -257,6 +257,7 @@ class TestSubmitClarificationQuestions(BaseApplicationTest):
         brief = api_stubs.brief(status="live")
         brief['briefs']['frameworkName'] = 'Brief Framework Name'
         brief['briefs']['clarificationQuestionsPublishedBy'] = '2016-03-29T10:11:13.000000Z'
+        brief['briefs']['organisation'] = ['DTA']
         data_api_client.get_brief.return_value = brief
         data_api_client.get_supplier.return_value = self.supplier()
         data_api_client.get_application.return_value = self.application()
@@ -273,14 +274,14 @@ class TestSubmitClarificationQuestions(BaseApplicationTest):
                 email_body=FakeMail("important question"),
                 from_email=self.app.config['CLARIFICATION_EMAIL_FROM'],
                 to_email_addresses=['buyer@email.com'],
-                subject=u"You\u2019ve received a new supplier question about \u2018I need a thing to do a thing\u2019"
+                subject=u"You received a new question for \u2018I need a thing to do a thing\u2019"
             ),
             mock.call(
                 from_name='Digital Marketplace Admin',
                 email_body=FakeMail("important question"),
                 from_email=self.app.config['CLARIFICATION_EMAIL_FROM'],
                 to_email_addresses=['email@email.com'],
-                subject=u"Your question about \u2018I need a thing to do a thing\u2019"
+                subject=u"You submitted a question for I need a thing to do a thing (1234) successfully"
             ),
         ])
 

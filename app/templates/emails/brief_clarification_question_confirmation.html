@@ -4,24 +4,19 @@
     <meta charset="UTF-8">
 </head>
 <body>
-  <p>Hi {{ supplier_name }},</p>
+  <p>We've sent your question on <a href="{{ frontend_address }}/digital-marketplace/opportunities/{{brief_id}}">{{brief_name}} ({{brief_id}})</a>’ to {{brief_organisation}}.</p>
 
-  <p>Your question about ‘{{ brief_name }}’ has been sent.</p>
-
-  <p>You asked:</p>
-
-  <div>
+  <p>You asked:<br />
   ‘{{ message }}’
-  </div>
-
-  <p>
-  Your question will be posted with the buyer’s answer on the <a href="{{ frontend_address }}{{ config['BASE_PREFIX'] }}/{{ framework_slug }}/opportunities/{{ brief_id }}">'{{ brief_name }}' page</a>.
   </p>
 
+  <p>If you have any questions or need guidance, please <a href="{{ frontend_address }}/contact-us">contact the Marketplace</a>.</p>
+
   <p>
-  Thanks,<br />
-  The Marketplace team</p> 
-  <p><strong>Your feedback shapes the Marketplace</strong><br /> 
-   The Digital Marketplace is an agile development. This means it evolves over time in response to user needs. If you have any questions, feedback or would like to take part in user research, please email <a href="mailto:marketplace@digital.gov.au">marketplace@digital.gov.au</a>.</p>
+    Regards,<br />
+    The Digital Marketplace team<br />
+    Digital Transformation Agency<br />
+    <a href="{{ frontend_address }}">marketplace.service.gov.au</a> | <a href="https://dta.gov.au">dta.gov.au</a>
+  </p>
 </body>
 </html>
