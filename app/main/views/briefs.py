@@ -53,45 +53,10 @@ def question_and_answer_session(brief_id):
     ), 200
 
 
-@main.route('/opportunities/<int:brief_id>/ask-a-question', methods=['GET', 'POST'])
+@main.route('/opportunities/<int:brief_id>/ask-a-question', methods=['GET'])
 @login_required
 def ask_brief_clarification_question(brief_id):
-    brief = get_brief(data_api_client, brief_id, allowed_statuses=['live'])
-
-    if brief['clarificationQuestionsAreClosed']:
-        return render_template(
-            "briefs/brief_closed_error.html"
-        ), 400
-
-    if not is_supplier_selected_for_brief(data_api_client, current_user, brief):
-        return _render_not_selected_for_brief_error_page(clarification_question=True)
-
-    error_message = None
-    clarification_question_value = None
-
-    if request.method == 'POST':
-        clarification_question = request.form.get('clarification-question', '').strip()
-        if not clarification_question:
-            error_message = "Question cannot be empty"
-        elif len(clarification_question) > 5000:
-            clarification_question_value = clarification_question
-            error_message = "Question cannot be longer than 5000 characters"
-        elif not re.match("^$|(^(?:\\S+\\s+){0,99}\\S+$)", clarification_question):
-            clarification_question_value = clarification_question
-            error_message = "Question must be no more than 100 words"
-        else:
-            send_brief_clarification_question(data_api_client, brief, clarification_question)
-            flash('message_sent', 'success')
-
-    status_code = 200 if not error_message else 400
-    return render_template_with_csrf(
-        "briefs/clarification_question.html",
-        status_code=status_code,
-        brief=brief,
-        error_message=error_message,
-        clarification_question_name='clarification-question',
-        clarification_question_value=clarification_question_value
-    )
+    return redirect('/2/brief/{}/ask-a-question'.format(brief_id))
 
 
 @main.route('/opportunities/<int:brief_id>/responses/create', methods=['GET'])
