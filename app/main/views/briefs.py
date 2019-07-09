@@ -350,46 +350,7 @@ def _render_not_eligible_for_brief_error_page(brief, clarification_question=Fals
 @main.route('/opportunities/<int:brief_id>/assessment/choose', methods=['GET'])
 @login_required
 def choose_assessment(brief_id):
-    framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
-    opportunity_url = '/2/opportunities'
-    supplier_domains = data_api_client.get_supplier(current_user.supplier_code)['supplier']['domains']
-    domains = {data_api_client.req.domain(domain_name).get()['domain']['id']: domain_name
-               for domain_name
-               in supplier_domains['unassessed']}
-
-    supplier_assessments = data_api_client.req.assessments().supplier(current_user.supplier_code).get()
-    if brief_id in supplier_assessments['briefs']:
-        return redirect(url_for('main.assessment_status', brief_id=brief_id))
-    for domain in supplier_assessments['unassessed']:
-        for key, value in domains.items():
-            if value == domain:
-                del domains[key]
-
-    props = {
-            'domains': domains,
-            'brief_id': brief_id,
-            'assessmentUrl': url_for(".create_assessment", brief_id=brief_id),
-    }
-
-    rendered_component = render_component('bundles/Brief/DomainAssessmentChoiceWidget.js', props)
-
-    return render_template(
-        '_react.html',
-        breadcrumb_items=[
-            {
-                "link": '/',
-                "label": "Home"
-            },
-            {
-                "link": opportunity_url,
-                "label": "Opportunities"
-            },
-            {
-                "label": "Choose Assessment Area of Expertise"
-            }
-        ],
-        component=rendered_component
-    )
+    return redirect('/2/seller-dashboard')
 
 
 @main.route('/opportunities/<int:brief_id>/assessment', methods=['GET'])
@@ -402,155 +363,16 @@ def create_assessment(brief_id, domain_id=None):
         domain_id = int(request.args.get('domain'))
     if domain_id is None:
         return abort(400)
-    brief = get_brief(data_api_client, brief_id, allowed_statuses=['live'])
-
-    domain_name = data_api_client.req.domain(domain_id).get()['domain']['name']
-    data_api_client.req.assessments().post(data={
-        'update_details': {'updated_by': current_user.email_address},
-        'assessment': {
-            'supplier_code': current_user.supplier_code,
-            'domain_name': domain_name,
-            'brief_id': brief['id']
-        }})
-
-    framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
-    opportunity_url = '/2/opportunities'
-    previewUrl = '/{}/opportunities/{}/response'.format(framework_slug, brief_id)
-    props = {
-        'form_options': {
-            'created': True,
-            'domain': domain_name,
-            'opportunityUrl': opportunity_url,
-            'briefLot': brief.get('lot', None),
-            'previewUrl': previewUrl,
-            'closingDate':
-                'dates' in brief and 'closing_date' in brief['dates'] and brief['dates']['closing_date'] or None
-        }
-    }
-
-    if current_user.supplier_code is not None:
-        props['form_options']['profileUrl'] = '/supplier/{}'.format(current_user.supplier_code)
-
-    rendered_component = render_component('bundles/CaseStudy/CaseStudySubmitConfirmationWidget.js', props)
-
-    return render_template(
-        '_react.html',
-        breadcrumb_items=[
-            {
-                "link": '/',
-                "label": "Home"
-            },
-            {
-                "link": opportunity_url,
-                "label": "Opportunities"
-            },
-            {
-                "label": "Assessment submitted"
-            }
-        ],
-        component=rendered_component
-    )
+    return redirect('/2/seller-assessment/create/{}'.format(domain_id))
 
 
 @main.route('/opportunities/<int:brief_id>/assessment/status', methods=['GET'])
 @login_required
 def assessment_status(brief_id):
-    framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
-    opportunity_url = '/2/opportunities'
-    previewUrl = '/{}/opportunities/{}/response'.format(framework_slug, brief_id)
-
-    brief = get_brief(data_api_client, brief_id, allowed_statuses=['live'])
-    domain = brief.get('areaOfExpertise', None)
-
-    props = {
-        'form_options': {
-            'inReview': True,
-            'domain': domain,
-            'briefTitle': brief.get('title', None),
-            'briefLot': brief.get('lot', None),
-            'opportunityUrl': opportunity_url,
-            'previewUrl': previewUrl,
-            'closingDate':
-                'dates' in brief and 'closing_date' in brief['dates'] and brief['dates']['closing_date'] or None
-        }
-    }
-
-    rendered_component = render_component('bundles/CaseStudy/CaseStudySubmitConfirmationWidget.js', props)
-
-    return render_template(
-        '_react.html',
-        breadcrumb_items=[
-            {
-                "link": '/',
-                "label": "Home"
-            },
-            {
-                "link": opportunity_url,
-                "label": "Opportunities"
-            },
-            {
-                "label": "Assessment Status"
-            }
-        ],
-        component=rendered_component
-    )
+    return redirect('/2/seller-dashboard')
 
 
 @main.route('/opportunities/<int:brief_id>/assessment/initial', methods=['GET'])
 @login_required
 def assessment_initial(brief_id):
-    framework_slug = 'digital-marketplace' if feature.is_active('DM_FRAMEWORK') else 'digital-service-professionals'
-    opportunity_url = '/2/opportunities'
-    previewUrl = '/{}/opportunities/{}/response'.format(framework_slug, brief_id)
-
-    brief = get_brief(data_api_client, brief_id, allowed_statuses=['live'])
-    domain = brief.get('areaOfExpertise', None)
-
-    profile_url = None
-    is_recruiter = False
-    if current_user.supplier_code is not None:
-        profile_url = '/supplier/{}'.format(current_user.supplier_code)
-        supplier = data_api_client.get_supplier(
-            current_user.supplier_code).get('supplier', None)
-
-        if supplier is not None:
-            is_recruiter = supplier.get('is_recruiter', False)
-        if is_recruiter == 'false':
-            is_recruiter = False
-        if is_recruiter == 'true':
-            is_recruiter = True
-
-    props = {
-        'form_options': {
-            'initial': True,
-            'domain': domain,
-            'briefTitle': brief.get('title', None),
-            'briefLot': brief.get('lot', None),
-            'opportunityUrl': opportunity_url,
-            'previewUrl': previewUrl,
-            'profileUrl': profile_url,
-            'isRecruiter': is_recruiter,
-            'closingDate':
-                'dates' in brief and 'closing_date' in brief['dates'] and brief['dates']['closing_date'] or None
-        }
-    }
-
-    rendered_component = render_component('bundles/CaseStudy/CaseStudySubmitConfirmationWidget.js', props)
-
-    return render_template(
-        '_react.html',
-        breadcrumb_items=[
-            {
-                "link": '/',
-                "label": "Home"
-            },
-            {
-                "link": opportunity_url,
-                "label": "Opportunities"
-            },
-            {
-                "label": "Assessment Status"
-            }
-        ],
-        component=rendered_component
-    )
+    return redirect('/2/seller-dashboard')

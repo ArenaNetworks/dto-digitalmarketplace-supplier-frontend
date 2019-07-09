@@ -1,0 +1,14 @@
+applications:
+- name: dm-alpha-supplier
+  command: scripts/cf_run_app.sh
+  buildpack: python_buildpack
+  memory: 256M
+  disk_quota: 512M
+  instances: 1
+  services:
+  - ups-secret-service
+  - ups-dm-alpha-common
+  - ups-dm-alpha-supplier
+  routes:
+  - route: dm-alpha.apps.y.cld.gov.au/sellers
+  - route: dm-alpha-supplier.apps.y.cld.gov.au
