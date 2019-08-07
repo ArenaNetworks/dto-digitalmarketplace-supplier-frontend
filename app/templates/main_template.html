@@ -35,6 +35,12 @@
 
   <header role="banner" class="{% block header_class %}{% endblock %} au-grid au-body">
     <section>
+      {% if current_user.is_authenticated %}
+        {% set userType = current_user.role %}
+      {% else %}
+        {% set userType = '' %}
+      {% endif %}
+
       {% set dashboardText = 'Dashboard' %}
       {% set dashboardUrl = '' %}
       {% set notification_count = '' %}
@@ -47,6 +53,7 @@
         {% set dashboardUrl = '/2/seller-dashboard' %}
         {% set notification_count = current_user.notification_count %}
       {% endif %}
+
       {% set registerUrl = config['BASE_PREFIX'] + '/sellers/signup' %}
       {% set registerText = 'Join the Marketplace' %}
         {% set props = {
@@ -57,7 +64,8 @@
         'dashboardText': dashboardText,
         'notificationCount': notification_count,
         'logoutUrl': config['BASE_PREFIX'] + '/logout',
-        'isAuthenticated': current_user.is_authenticated
+        'isAuthenticated': current_user.is_authenticated,
+        'userType': userType
         } %}
       {% set auth_component = render_component('bundles/Header/AuthWidget.js', props, True) %}
       {{ auth_component|as('react_bundle') }}
