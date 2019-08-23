@@ -1,5 +1,9 @@
 import os
 import urlparse
+import redis
+
+from flask_kvsession import KVSessionExtension
+from simplekv.memory.redisstore import RedisStore
 
 from flask import Flask, request
 from flask_login import LoginManager
@@ -17,10 +21,6 @@ login_manager = LoginManager()
 
 from app.main.helpers.services import parse_document_upload_time  # noqa
 from app.main.helpers.frameworks import question_references  # noqa
-
-import redis
-from flask_kvsession import KVSessionExtension
-from simplekv.memory.redisstore import RedisStore
 
 
 def create_app(config_name):
