@@ -18,6 +18,10 @@ login_manager = LoginManager()
 from app.main.helpers.services import parse_document_upload_time  # noqa
 from app.main.helpers.frameworks import question_references  # noqa
 
+import redis
+from flask_kvsession import KVSessionExtension
+from simplekv.memory.redisstore import RedisStore
+
 
 def create_app(config_name):
     asset_path = os.environ.get('ASSET_PATH', configs[config_name].ASSET_PATH)
@@ -31,6 +35,13 @@ def create_app(config_name):
         data_api_client=data_api_client,
         login_manager=login_manager,
     )
+
+    if application.config['REDIS_SESSIONS']:
+        session_store = RedisStore(redis.StrictRedis(
+            host=application.config['REDIS_SERVER_HOST'],
+            port=application.config['REDIS_SERVER_PORT']
+        ))
+        KVSessionExtension(session_store, application)
 
     from .main import main as main_blueprint
     from .status import status as status_blueprint

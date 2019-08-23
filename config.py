@@ -12,8 +12,6 @@ class Config(object):
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_SAMESITE = 'Lax'
 
-    PERMANENT_SESSION_LIFETIME = 18*3600
-
     BASE_PREFIX = ''
     URL_PREFIX = BASE_PREFIX + '/sellers'
 
@@ -103,6 +101,11 @@ class Config(object):
     ROLLBAR_TOKEN = None
     DM_TEAM_SLACK_WEBHOOK = None
     DM_GA_CODE = 'UA-72722909-6'
+
+    # redis
+    REDIS_SESSIONS = True
+    REDIS_SERVER_HOST = '127.0.0.1'
+    REDIS_SERVER_PORT = 6379
 
 
 class Test(Config):
