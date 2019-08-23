@@ -132,6 +132,8 @@ class Test(Config):
     DM_COMMUNICATIONS_BUCKET = 'digitalmarketplace-communications-dev-dev'
     DM_ASSETS_URL = 'http://asset-host'
 
+    REDIS_SESSIONS = False
+
 
 class Development(Config):
     DEBUG = True
