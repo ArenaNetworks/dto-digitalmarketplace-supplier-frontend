@@ -9,6 +9,7 @@ applications:
   - ups-secret-service
   - ups-dm-rc-common
   - ups-dm-rc-supplier
+  - marketplace-dev-redis-sessions
   routes:
   - route: dm-rc.apps.y.cld.gov.au/sellers
   - route: dm-rc-supplier.apps.y.cld.gov.au

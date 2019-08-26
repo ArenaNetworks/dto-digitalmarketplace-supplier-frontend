@@ -6,6 +6,7 @@ instances: 1
 services:
 - ups-dm-dev-common
 - ups-dm-dev-supplier
+- marketplace-dev-redis-sessions
 routes:
 - route: dm-dev.apps.y.cld.gov.au/sellers
 - route: dm-dev-supplier.apps.y.cld.gov.au
