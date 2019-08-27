@@ -461,18 +461,6 @@ class TestRespondToBrief(BaseApplicationTest):
         assert res.status_code == 302
         assert 'assessment' in res.location
 
-    @mock.patch('app.main.views.briefs.render_component')
-    def test_create_assessment(self, render_component, data_api_client):
-        brief = self.brief.copy()
-        data_api_client.get_brief.return_value = brief
-        data_api_client.get_framework.return_value = self.framework
-        data_api_client.get_supplier.return_value = self.supplier
-        data_api_client.get_application.return_value = self.application
-        render_component.return_value.get_props.return_value = {}
-        res = self.client.get(self.url_for('main.create_assessment', brief_id=1234, domain_id=1))
-
-        assert res.status_code == 200
-
 
 @mock.patch("app.main.views.briefs.S3")
 @mock.patch("app.main.views.briefs.upload_service_documents")

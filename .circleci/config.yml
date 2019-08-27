@@ -151,6 +151,18 @@ jobs:
             cf login -a https://api.system.y.cld.gov.au -o dta -s marketplace -u $CF_USER_STAGING -p $CF_PASSWORD_STAGING
             cf zero-downtime-push dm-rc-supplier -f manifest.rc.yml --show-app-log
 
+  deploy_to_alpha:
+    <<: *deploy_docker
+    steps:
+      - attach_workspace:
+          at: .
+      - *cf_install
+      - run:
+          name: Deploy to RC
+          command: |
+            cf login -a https://api.system.y.cld.gov.au -o dta -s marketplace -u $CF_USER_STAGING -p $CF_PASSWORD_STAGING
+            cf zero-downtime-push dm-alpha-supplier -f manifest.alpha.yml --show-app-log
+
   deploy_to_production_clone:
     <<: *deploy_docker
     steps:
@@ -250,6 +262,13 @@ workflows:
               ignore: /.*/
             branches:
               only: rc
+      - deploy_to_alpha:
+          <<: *required_for_deploy
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              only: alpha
       - deploy_to_staging:
           <<: *required_for_deploy
           filters:
