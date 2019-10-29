@@ -19,6 +19,7 @@ enum34==1.1.6
 Flask==1.0.2
 Flask-Caching==1.4.0
 Flask-FeatureFlags==0.6
+Flask-KVSession==0.6.2
 Flask-Login==0.4.0
 Flask-Script==2.0.5
 freezegun==0.3.8
@@ -50,9 +51,11 @@ python-json-logger==0.1.6
 pytz==2016.10
 pytzdata==2017.1
 PyYAML==3.12
+redis==3.3.8
 requests==2.13.0
 rollbar==0.13.11
 s3transfer==0.1.10
+simplekv==0.13.0
 six==1.10.0
 termcolor==1.1.0
 tzlocal==1.3

@@ -6,6 +6,7 @@ instances: 5
 services:
 - ups-dm-common
 - ups-dm-supplier
+- marketplace-redis-sessions
 routes:
 - route: marketplace.service.gov.au/sellers
 - route: dm-supplier.apps.b.cld.gov.au
