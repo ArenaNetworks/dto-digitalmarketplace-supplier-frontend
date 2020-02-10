@@ -200,6 +200,10 @@ def application_update(id, step=None):
     form_data = from_response(request)
     application = form_data['application'] if json else form_data
 
+    # remove the ABN to prevent changes by users, as they set this on signup
+    if 'abn' in application and not current_user.has_role('admin'):
+        del application['abn']
+
     try:
         del application['status']
     except KeyError:
