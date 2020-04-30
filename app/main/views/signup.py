@@ -225,10 +225,11 @@ def download_single_file(id, slug):
     if not can_user_view_application(application) and not current_user.has_role('admin'):
         abort(403, 'Not authorised to access application')
 
-    file = s3_download_file(slug, os.path.join(S3_PATH, str(id)))
-
     mimetype = mimetypes.guess_type(slug)[0] or 'binary/octet-stream'
-    return Response(file, mimetype=mimetype)
+    return Response(
+        s3_download_file(current_app.config.get('S3_BUCKET_NAME', None), slug, os.path.join(S3_PATH, str(id))),
+        mimetype=mimetype
+    )
 
 
 @main.route('/application/<int:id>/documents/<slug>', methods=['POST'])
