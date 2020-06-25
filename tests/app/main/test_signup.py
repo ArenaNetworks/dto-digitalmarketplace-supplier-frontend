@@ -472,7 +472,7 @@ class TestDocuments(BaseApplicationTest):
             assert res.status_code == 200
             assert res.mimetype == 'application/pdf'
             assert res.data == 'test file contents'
-            download_file.assert_called_once_with('test.pdf', 'applications/1')
+            download_file.assert_called_once_with('', 'test.pdf', 'applications/1')
 
     @mock.patch("app.main.views.signup.data_api_client")
     @mock.patch('app.main.views.signup.s3_upload_file_from_request')
