@@ -31,66 +31,6 @@ def is_application_submitted(application):
     return application['application'].get('status', 'saved') != 'saved'
 
 
-@main.route('/signup', methods=['GET'])
-def start_seller_signup(applicant={}, errors=None):
-    rendered_component = render_component(
-        'bundles/SellerRegistration/SignupWidget.js', {
-            'form_options': {
-                'errors': errors
-            },
-            'yourInfoForm': applicant,
-        }
-    )
-
-    return render_template(
-        '_react.html',
-        component=rendered_component
-    )
-
-
-@main.route('/signup', methods=['POST'])
-def send_seller_signup_email():
-    user = from_response(request)
-    if user.get('user_type') != 'seller':
-        return abort(400)
-
-    fields = ['name', 'email_address']
-    errors = validate_form_data(user, fields)
-    if errors:
-        return start_seller_signup(user, errors)
-
-    duplicate = data_api_client.req.users().checkduplicates().post(data={"email_address": user['email_address']})
-    if duplicate.get('duplicate'):
-        return render_template('auth/seller-signup-email-sent.html', email_address=user['email_address'])
-
-    token = generate_application_invitation_token(user)
-    url = url_for('main.render_create_application', token=token, _external=True)
-    email_body = render_template(
-        'emails/create_seller_user_email.html',
-        url=url,
-        user=user,
-    )
-
-    try:
-        send_email(
-            user['email_address'],
-            email_body,
-            current_app.config['INVITE_EMAIL_SUBJECT'],
-            current_app.config['INVITE_EMAIL_FROM'],
-            current_app.config['INVITE_EMAIL_NAME']
-        )
-    except EmailError as e:
-        rollbar.report_exc_info()
-        current_app.logger.error(
-            'Invitation email failed to send. '
-            'error {error}',
-            extra={'error': six.text_type(e)}
-        )
-        abort(503, 'Failed to send user invite reset')
-
-    return render_template('auth/seller-signup-email-sent.html', email_address=user['email_address'])
-
-
 @main.route('/signup/create-user/<string:token>', methods=['GET'])
 def render_create_application(token, data=None, errors=None):
     data = data or {}
@@ -259,6 +199,10 @@ def application_update(id, step=None):
     json = request.content_type == 'application/json'
     form_data = from_response(request)
     application = form_data['application'] if json else form_data
+
+    # remove the ABN to prevent changes by users, as they set this on signup
+    if 'abn' in application and not current_user.has_role('admin'):
+        del application['abn']
 
     try:
         del application['status']
