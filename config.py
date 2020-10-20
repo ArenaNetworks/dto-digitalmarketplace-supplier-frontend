@@ -39,7 +39,7 @@ class Config(object):
 
     DEBUG = False
 
-    GENERIC_CONTACT_EMAIL = 'marketplace@digital.gov.au'
+    GENERIC_CONTACT_EMAIL = 'marketplace@dta.gov.au'
     DM_GENERIC_NOREPLY_EMAIL = 'no-reply@marketplace.digital.gov.au'
     DM_GENERIC_ADMIN_NAME = 'Digital Marketplace Admin'
     DM_GENERIC_SUPPORT_NAME = 'Digital Marketplace'
