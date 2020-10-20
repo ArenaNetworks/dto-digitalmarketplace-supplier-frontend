@@ -24,7 +24,7 @@ class Config(object):
 
     DM_DATA_API_URL = None
     DM_DATA_API_AUTH_TOKEN = None
-    DM_CLARIFICATION_QUESTION_EMAIL = 'no-reply@marketplace.digital.gov.au'
+    DM_CLARIFICATION_QUESTION_EMAIL = 'no-reply@marketplace.dta.gov.au'
     DM_FRAMEWORK_AGREEMENTS_EMAIL = 'enquiries@example.com'
 
     DM_AGREEMENTS_BUCKET = None
@@ -39,24 +39,24 @@ class Config(object):
 
     DEBUG = False
 
-    GENERIC_CONTACT_EMAIL = 'marketplace@digital.gov.au'
-    DM_GENERIC_NOREPLY_EMAIL = 'no-reply@marketplace.digital.gov.au'
+    GENERIC_CONTACT_EMAIL = 'marketplace@dta.gov.au'
+    DM_GENERIC_NOREPLY_EMAIL = 'no-reply@marketplace.dta.gov.au'
     DM_GENERIC_ADMIN_NAME = 'Digital Marketplace Admin'
     DM_GENERIC_SUPPORT_NAME = 'Digital Marketplace'
 
     RESET_PASSWORD_EMAIL_NAME = DM_GENERIC_ADMIN_NAME
-    RESET_PASSWORD_EMAIL_FROM = 'no-reply@marketplace.digital.gov.au'
+    RESET_PASSWORD_EMAIL_FROM = 'no-reply@marketplace.dta.gov.au'
     RESET_PASSWORD_EMAIL_SUBJECT = 'Reset your Digital Marketplace password'
 
     INVITE_EMAIL_NAME = DM_GENERIC_ADMIN_NAME
-    INVITE_EMAIL_FROM = 'no-reply@marketplace.digital.gov.au'
+    INVITE_EMAIL_FROM = 'no-reply@marketplace.dta.gov.au'
     INVITE_EMAIL_SUBJECT = 'Activate your new Marketplace account'
 
     AUTHREP_EMAIL_SUBJECT = 'Accepting the agreement to join the Digital Marketplace'
     NEW_SUPPLIER_INVITE_SUBJECT = 'Digital Marketplace - invitation to create seller account'
 
     CLARIFICATION_EMAIL_NAME = DM_GENERIC_ADMIN_NAME
-    CLARIFICATION_EMAIL_FROM = 'no-reply@marketplace.digital.gov.au'
+    CLARIFICATION_EMAIL_FROM = 'no-reply@marketplace.dta.gov.au'
     CLARIFICATION_EMAIL_SUBJECT = 'Thanks for your clarification question'
     DM_FOLLOW_UP_EMAIL_TO = 'digitalmarketplace@mailinator.com'
 
@@ -170,7 +170,7 @@ class Live(Config):
     SERVER_NAME = 'marketplace.service.gov.au'
     FRONTEND_ADDRESS = 'https://marketplace.service.gov.au'
 
-    DM_FRAMEWORK_AGREEMENTS_EMAIL = 'no-reply@marketplace.digital.gov.au'
+    DM_FRAMEWORK_AGREEMENTS_EMAIL = 'no-reply@marketplace.dta.gov.au'
 
     FEATURE_FLAGS = {
         'EDIT_SECTIONS': False,
