@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 setup(
     name='dto-digitalmarketplace-supplier-frontend',
     version='528',
-    url='https://github.com/ausdto/dto-digitalmarketplace-supplier-frontend',
+    url='https://github.com/arenanetworks/dto-digitalmarketplace-supplier-frontend',
     license='MIT',
     author='GDS Developers',
     description='Supplier frontend',
