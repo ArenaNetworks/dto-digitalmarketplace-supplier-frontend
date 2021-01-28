@@ -68,7 +68,7 @@ app/templates/toolkit
 app/assets/scss/toolkit
 app/assets/scss/uikit2
 pancake/
-app/content
+#app/content
 
 # Front end generated assets
 app/static
