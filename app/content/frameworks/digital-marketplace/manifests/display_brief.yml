@@ -1,0 +1,121 @@
+-
+  name: Overview
+  questions:
+    - summary
+    - startDate
+    - contractLength
+    - locationOutcomes
+    - locationSpecialists
+    - locationParticipants
+    - researchDates
+    - organisation
+    - budgetRangeOutcomesParticipants
+    - budgetRangeSpecialists
+-
+  name: About the work
+  questions:
+    - backgroundInformation
+    - outcome
+    - endUsers
+    - workAlreadyDone
+    - existingTeamOutcomes
+    - existingTeamSpecialists
+    - specialistWork
+    - additionalRelevantInformation
+    - phase
+-
+  name: About the research
+  questions:
+    - participantSpecification
+    - participantAccessibilityNeeds
+    - researchPlan
+    - researchAddress
+    - accessRestrictions
+    - researchRounds
+    - participantsPerRound
+    - researchFrequency
+    - researchOutOfHours
+-
+  name: Work setup
+  questions:
+    - workplaceAddress
+    - workingArrangements
+    - securityClearance
+-
+  name: Additional information
+  questions:
+    - additionalTerms
+-
+  name: Skills and experience
+  summary_page_description: Buyers will use the essential and nice-to-have skills and experience to help them evaluate sellers’ technical competence.
+  questions:
+    - essentialRequirementsOutcomes
+    - essentialRequirementsSpecialists
+    - essentialRequirementsParticipants
+    - niceToHaveRequirementsOutcomes
+    - niceToHaveRequirementsSpecialists
+    - niceToHaveRequirementsParticipants
+-
+  name: How sellers will be evaluated
+  questions:
+    - numberOfSuppliersOutcomes
+    - numberOfSuppliersSpecialists
+    - numberOfSuppliersParticipants
+    - successCriteriaOutcomes
+    - successCriteriaParticipants
+    - culturalFitCriteriaOutcomes
+    - culturalFitCriteriaSpecialists
+    - priceCriteria
+    - areaOfExpertiseSpecialists
+    - evaluationTypeOutcomes
+    - evaluationTypeSpecialists
+    - evaluationTypeParticipants
+    - weightingOutcomes
+    - weightingSpecialists
+    
+-
+  name: Overview
+  questions: 
+    - summaryDisplayTraining
+    - startDateTraining
+    - timeframeConstraintsTraining
+    - locationCityOrRegionTraining
+    - locationStateTraining
+    - budgetRangeTextTraining
+
+-
+  name: Description of training
+  summary_page_description: You can refer to the Learning Design Standard https://govau.github.io/learning-design-standards/ to help structure your training.
+  questions:
+    - trainingDetailDisplayTraining
+    - ldsDigitalFoundationDisplayTraining
+    - ldsAgileDeliveryDisplayTraining
+    - ldsUserResearchDisplayTraining
+    - ldsContentDesignDisplayTraining
+    - whyTraining
+    - audienceTraining
+    - trainingLengthTextTraining
+    - approachDisplayTraining
+
+-
+  name: Additional info
+  questions:
+    - securityClearanceDisplayTraining
+    - paymentApproachDisplayTraining
+    - contractLengthTraining
+    - intellectualPropertyTraining
+    - additionalTermsTraining
+
+-
+  name: Evaluations
+  questions:
+    - numberOfSuppliersTraining
+    - weightingTraining
+    - technicalCompetenceCriteriaTraining
+    - culturalFitCriteriaTraining
+
+-
+  name: Assessment methods
+  questions:
+    - evaluationTypeSellerSubmissionsTraining
+    - evaluationTypeSellerRequestsDisplayTraining

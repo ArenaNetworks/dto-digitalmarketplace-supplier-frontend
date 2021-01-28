@@ -1,0 +1,283 @@
+-
+  name: Title
+  editable: True
+  step: 1
+  questions:
+    - titleOutcomesParticipants
+
+-
+  name: Role
+  editable: True
+  step: 1
+  questions:
+    - titleSpecialists
+
+-
+  name: Location
+  editable: True
+  step: 1
+  questions:
+    - locationOutcomes
+    - locationSpecialists
+    - locationParticipants
+-
+  name: Description of work
+  editable: True
+  step: 1
+  description: ''
+  questions:
+    - organisation
+    - backgroundInformation
+    - outcome
+    - specialistWork
+    - endUsers
+    - workAlreadyDone
+    - phase
+    - existingTeamOutcomes
+    - existingTeamSpecialists
+    - additionalRelevantInformation
+    - researchRounds
+    - participantsPerRound
+    - researchDates
+    - researchFrequency
+    - researchOutOfHours
+    - researchAddress
+    - accessRestrictions
+    - participantSpecification
+    - participantAccessibilityNeeds
+    - researchPlan
+    - workplaceAddress
+    - workingArrangements
+    - securityClearance
+    - startDate
+    - contractLength
+    - additionalTerms
+    - budgetRangeOutcomesParticipants
+    - budgetRangeSpecialists
+    - summary
+
+-
+  name: Shortlist and evaluation process
+  editable: True
+  step: 2
+  description: |
+    There are 3 stages to finding the supplier that best meets your needs.
+
+    ##1\. View suppliers who applied
+    When suppliers apply for a specialist opportunity, they provide a CV and declare which essential and nice to have skills and experience they have.
+
+    When suppliers apply for an outcome-based opportunity they declare which essential and nice to have skills and experience they have.
+
+    ##2\. Create a shortlist
+    Once you have a list of eligible suppliers, you can exclude the suppliers who:
+
+    - have the least nice&#8209;to&#8209;have skills and experience
+    - can’t start when you need them to
+
+    You may need to ask for evidence of skills and experience if you have too many suppliers.
+
+
+    ##3\. Evaluate your shortlist
+    Ask the shortlisted suppliers for:
+
+      - evidence of their skills and experience
+      - a proposal explaining how they plan to meet your requirements
+
+    You must tell suppliers how you’ll evaluate and assess them.
+
+  questions:
+    - numberOfSuppliersOutcomes
+    - weightingOutcomes
+    - technicalCompetenceCriteriaOutcomes
+    - culturalFitCriteriaOutcomes
+    - priceCriteria
+    - evaluationTypeOutcomes
+
+-
+  name: Shortlist and evaluation process
+  editable: True
+  step: 2
+  description: |
+    There are 3 stages to finding the specialist that best meets your needs.
+
+    ##1\. View specialists who applied
+    When specialists apply, they declare which of your essential and nice&#8209;to&#8209;have skills and experience they have. Specialists who don’t meet your essential skills and experience are excluded.
+
+    ##2\. Create a shortlist
+    Once you have a list of eligible specialists, you can exclude the specialists who:
+
+    - have the least nice&#8209;to&#8209;have skills and experience
+    - can’t start when you need them to
+
+    You may need to ask for evidence of skills and experience if you have too many specialists.
+
+
+    ##3\. Evaluate your shortlist
+    Ask the shortlisted specialists for evidence of their skills and experience.
+
+    You must tell specialists how you’ll evaluate and assess them.
+
+  questions:
+    - areaOfExpertiseSpecialists
+    - numberOfSuppliersSpecialists
+    - weightingSpecialists
+    - technicalCompetenceCriteriaSpecialists
+    - culturalFitCriteriaSpecialists
+    - evaluationTypeSpecialists
+
+-
+  name: Shortlist and evaluation process
+  editable: True
+  step: 2
+  description: |
+    There are 3 stages to finding the supplier that best meets your needs.
+
+    ##1\. View suppliers who applied
+    When suppliers apply, they declare which of your essential and nice&#8209;to&#8209;have skills and experience they have. Suppliers who don’t meet your essential skills and experience are excluded.
+
+    ##2\. Create a shortlist
+    Once you have a list of eligible suppliers, you can exclude the suppliers who:
+
+    - have the least nice&#8209;to&#8209;have skills and experience
+    - can’t start when you need them to
+
+    You may need to ask for evidence of skills and experience if you have too many suppliers.
+
+
+    ##3\. Evaluate your shortlist
+    Ask the shortlisted suppliers for:
+
+      - evidence of their skills and experience
+      - a proposal explaining how they plan to recruit particpants
+
+    You must tell suppliers how you’ll evaluate and assess them.
+
+  questions:
+    - numberOfSuppliersParticipants
+    - weightingParticipants
+    - technicalCompetenceCriteriaParticipants
+    - evaluationTypeParticipants
+
+-
+  name: How long your brief will be open
+  editable: True
+  step: 3
+  questions:
+    - requirementsLengthSpecialistsOutcomes
+
+-
+  name: Question and answer session details
+  editable: True
+  step: 3
+  description: |
+    While the application period is open, you need to answer all questions suppliers ask you by posting them on your brief.
+
+    Providing a question and answer session is optional, but it means you can explain your needs and answer any questions quickly.
+  questions:
+    - questionAndAnswerSessionDetailsOutcomesParticipants
+    - questionAndAnswerSessionDetailsSpecialists
+
+-
+  name: Who can respond
+  editable: True
+  step: 3
+  questions:
+    - specifySeller
+
+# training related
+-
+  name: Title
+  editable: True
+  step: 1
+  questions:
+    - titleTraining
+
+-
+  name: Organisation
+  editable: True
+  step: 2
+  questions:
+    - organisationTraining
+
+-
+  name: Description of training
+  editable: True
+  step: 3
+  questions:
+    - whatTraining
+    - ldsDigitalFoundationTraining
+    - ldsAgileDeliveryTraining
+    - ldsUserResearchTraining
+    - ldsContentDesignTraining
+    - trainingDetailTraining
+    - whyTraining
+    - audienceTraining
+    - trainingLengthTraining
+    - approachTraining
+
+-
+  name: Approach to market
+  editable: True
+  step: 4
+  questions:
+    - requirementsLengthTraining
+    - specifySellerTraining
+    - contactNumberTraining
+  
+
+-
+  name: Timeframes, location and budget
+  editable: True
+  step: 5
+  questions:
+    - timeframesTraining
+    - locationCityOrRegionTraining
+    - locationStateTraining
+    - budgetRangeTextTraining
+    - paymentApproachTraining
+
+-
+  name: Additional information
+  editable: True
+  step: 6
+  questions:
+    - securityClearanceTraining
+    - contractLengthTraining
+    - intellectualPropertyTraining
+    - additionalTermsTraining
+
+-
+  name: Evaluate responses
+  editable: True
+  step: 7
+  questions:
+    - numberOfSuppliersTraining
+    - weightingTraining
+    - technicalCompetenceCriteriaTraining
+    - culturalFitCriteriaTraining
+    - evaluationTypeTraining
+
+-
+  name: Summary
+  editable: True
+  step: 8
+  questions:
+    - summaryTraining
+
+-
+  name: Question and answer session details
+  editable: True
+  step: 9
+  description: |
+    While the brief is open, you'll need to answer all questions sellers ask, by posting them on your brief. You'll also receive an email from the Marketplace with further information.
+
+    Question and answer sessions can be by phone or video call. This gives buyers and sellers the opportunity to understand each other's needs.
+  questions:
+    - questionAndAnswerSessionDetailsTraining
+
+-
+  name: Not Editable
+  editable: False
+  step: 10
+  questions:
+    - evaluationTypeSellerSubmissionsTraining

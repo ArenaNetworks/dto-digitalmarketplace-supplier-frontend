@@ -1,0 +1,20 @@
+id: additionalTerms
+name: Additional terms and conditions
+question: Additional terms and conditions
+question_advice: |
+  You can apply the [comprehensive terms](/api/2/r/comprehensive-terms-current.pdf) to this opportunity. 
+  To apply the terms, include in this section: 
+  "This opportunity will be subject to the comprehensive terms. More information can be found at https://marketplace1.zendesk.com/hc/en-gb/articles/115011214027"  
+    
+optional: true
+type: textbox_large
+max_length_in_words: 200
+depends:
+  - "on": "lot"
+    being:
+      - training
+validations:
+  -
+    name: under_word_limit
+    message: 'Your answer must be no more than 200 words.'
+empty_message: Describe additional terms and conditions
