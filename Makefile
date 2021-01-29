@@ -42,8 +42,8 @@ show_environment:
 	@env | grep DM_ || true
 
 docker:
-	mkdir -p app/content/frameworks
-	cp -R ../dto-digitalmarketplace-frameworks/frameworks app/content/.
+	#mkdir -p app/content/frameworks
+	#cp -R ../dto-digitalmarketplace-frameworks/frameworks app/content/.
 	docker build -t dto-supplier-frontend .
 docker-run:
 	docker run -it --rm -p 8000:8000 -t dto-supplier-frontend
